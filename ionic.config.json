@@ -1,0 +1,7 @@
+{
+  "name": "travelsnap",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
