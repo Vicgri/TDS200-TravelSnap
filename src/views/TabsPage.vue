@@ -3,6 +3,11 @@
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="login" href="/tabs/login">
+          <ion-icon aria-hidden="true" :icon="logIn" />
+          <ion-label>Log In</ion-label>
+        </ion-tab-button>
+
         <ion-tab-button tab="gallery" href="/tabs/gallery">
           <ion-icon aria-hidden="true" :icon="square" />
           <ion-label>Gallery</ion-label>
@@ -24,5 +29,5 @@
 
 <script setup lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
-import {ellipse, search, square, star, triangle} from 'ionicons/icons';
+import { logIn, search, square, star } from 'ionicons/icons';
 </script>
