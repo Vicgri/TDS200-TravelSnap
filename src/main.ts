@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import { initializeApp } from "firebase/app";
 
 import { IonicVue } from '@ionic/vue';
 
@@ -23,10 +24,26 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+const firebaseConfig = {
+  apiKey: "AIzaSyD_R-vJrkh4_nTfyDk7Hkky7K0FdsS6g0U",
+  authDomain: "travelsnap-1234a.firebaseapp.com",
+  projectId: "travelsnap-1234a",
+  storageBucket: "travelsnap-1234a.appspot.com",
+  messagingSenderId: "2338160955",
+  appId: "1:2338160955:web:7d25275c4bd68d6501771e",
+  measurementId: "G-6PS61DYRGL"
+};
+initializeApp(firebaseConfig)
+
+
+
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
-  
+
+
+
+
 router.isReady().then(() => {
   app.mount('#app');
 });
