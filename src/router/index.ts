@@ -16,8 +16,8 @@ const routes: Array<RouteRecordRaw> = [
         redirect: '/tabs/gallery'
       },
       {
-        path: 'login',
-        component: () => import (("@/views/LoginPage.vue"))
+        path: 'authentication',
+        component: () => import (("@/views/AuthenticationPage.vue"))
       },
       {
         path: 'gallery',
