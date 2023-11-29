@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore"
 
 import { IonicVue } from '@ionic/vue';
 
@@ -24,7 +25,6 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-
 const firebaseConfig: {
   apiKey: string;
   authDomain: string;
@@ -44,11 +44,19 @@ const firebaseConfig: {
 };
 
 
+
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
-  initializeApp(firebaseConfig);
+initializeApp(firebaseConfig)
+getFirestore()
+
+// Create a constant 'db' to reference the "users" collection
+//const userCollection = db.collection("users")
+
 
 router.isReady().then(() => {
   app.mount('#app');
 });
+
+export { app, getFirestore, initializeApp};
