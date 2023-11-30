@@ -5,7 +5,7 @@
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="authentication" href="/tabs/authentication">
           <ion-icon aria-hidden="true" :icon="logIn" />
-          <ion-label>Log In or register</ion-label>
+          <ion-label>Sign up or Log in</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="gallery" href="/tabs/gallery">
