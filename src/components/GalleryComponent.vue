@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import {db} from "@/main";
 
-
 import { getDocs,collection } from 'firebase/firestore/lite';
 const travelCollectionRef = collection(db, "travel")
 import {ref} from "vue";
 const allTravels = ref([]);
-const fetchCampingSpot = async () => {
+const fetchTravel = async () => {
   try{
 
     // Get the document
@@ -22,7 +21,7 @@ const fetchCampingSpot = async () => {
   }
 
 }
-fetchCampingSpot()
+fetchTravel()
 console.log(allTravels.value)
 </script>
 

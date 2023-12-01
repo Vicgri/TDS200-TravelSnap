@@ -29,6 +29,7 @@ const signUp = async () => {
   try {
     await authService.signUp(userDetails.value.email, userDetails.value.password);
     await login()
+    router.replace('/tabs/gallery');
   } catch (error) {
     console.log("error with signing up", error.message)
   }
@@ -38,7 +39,7 @@ const login = async () => {
   try {
     await authService.login(userDetails.value.email, userDetails.value.password);
     console.log("login successful")
-    router.replace('/tabs/upload');
+    router.replace('/tabs/gallery');
   }
   catch (error) {
     console.error("error with login", error.message)
@@ -128,7 +129,6 @@ ion-segment-button{
 }
 
 ion-list {
-  height: 100px;
-  width: 100px;
+
 }
 </style>
