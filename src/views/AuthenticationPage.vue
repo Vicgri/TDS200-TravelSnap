@@ -50,21 +50,23 @@ const login = async () => {
 
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
-    </ion-content>
-  </ion-page>
+    <ion-content>
 
-
+       <ion-grid class="ion-no-padding">        
+         <ion-row>                              
+           <ion-col class="ion-text-center">    
     <ion-segment value="default">
       <ion-segment-button value="default">
-        <ion-label color="">Log In</ion-label>
+        <ion-label>Log In</ion-label>
       </ion-segment-button>
       <ion-segment-button value="segment">
         <ion-label>Sign Up</ion-label>
       </ion-segment-button>
     </ion-segment>
 
-        <ion-toolbar>
+
+
+
           <ion-list>
             <ion-list-header>
               <ion-label>Create an Account</ion-label>
@@ -96,24 +98,37 @@ const login = async () => {
           </ion-list>
           <ion-button @click="login" class="auth-btn">Log in</ion-button>
           <ion-button @click="signUp" class="auth-btn">Sign up</ion-button>
-        </ion-toolbar>
-
+            </ion-col>
+           </ion-row>
+          </ion-grid>
+       </ion-content>
+     </ion-page>
 </template>
-                //4D483B
-//282625      
+
+
 
 <style scoped>
-ion-segment-button {
+ion-content {
+  --background: linear-gradient(#465b6d, #f3a5a1);
 
---indicator-color: #D5D1C4;
---color-checked: #D5D1C4;
---background-checked: #282625;
---border-radius: 10px;
   
+                          
+}
+
+ion-segment-button{
+--ion-background-color: #f8f8e5;
+--ion-text-color: #352d16;
+//--indicator-color: #f8f8e5;
+--color-checked: #352d16;
+//--background-checked: #352d16;
+--border-radius: 10px;
+--margin-top: 5px;
+--margin-bottom: 5px;
+
 }
 
 ion-list {
-  display: flex;
-  flex-direction: column;
+  height: 100px;
+  width: 100px;
 }
 </style>
