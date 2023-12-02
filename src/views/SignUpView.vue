@@ -15,6 +15,7 @@ import {
 import { authService } from "../services/firebase.auth"
 import { ref } from "vue"
 import { useRouter } from "vue-router";
+import {arrowBack} from "ionicons/icons";
 
 const router = useRouter()
 
@@ -44,10 +45,21 @@ const signUp = async () => {
     console.log("error with signing up", error.message)
   }
 }
+
+const backToLogin =() => {
+  router.replace('/authentication')
+}
 </script>
 
 <template>
   <ion-content>
+
+    <div class ="back-button ion padding">
+      <ion-button @click="backToLogin">
+        <ion-icon :icon="arrowBack"></ion-icon>
+      </ion-button>
+    </div>
+
     <div class ="signup-section ion-padding">
       <div class ="heading ion-padding">
         <h1>Create an Account</h1>
@@ -135,6 +147,10 @@ ion-input {
     --background: #352d16;
 
   }
+}
+
+.back-button ion-button {
+  --background: #352d16;
 }
 
 </style>

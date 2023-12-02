@@ -131,14 +131,17 @@ ion-input {
 
 }
   .action-button {
-  text-align: center;
-  .login-button {
-    --background: #352d16;
+    text-align: center;
   }
-  .signup-button {
+  .login-button,
+  .signup-button,
+  p {
     --background: #352d16;
-
-  }
+    display: inline-block;
+    margin-right: 20px;
 }
+  p {
+    color: #352d16
+  }
 
 </style>
