@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     component: LogInView
   },
   {
-    path: '/authentication',
+    path: '/signup',
     component: SignUpView
   },
   { path: '/tabs',

@@ -5,6 +5,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore/lite';
 import { IonicVue } from '@ionic/vue';
 
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
 
@@ -48,8 +49,6 @@ export const db = getFirestore(firebaseApp);
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
-
-
 
 
 router.isReady().then(() => {
