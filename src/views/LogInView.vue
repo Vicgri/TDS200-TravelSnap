@@ -20,7 +20,11 @@ import { useRouter } from "vue-router";
 const router = useRouter()
 
 const signupPage = () => {
-  router.replace('/signup')
+  try {
+    router.replace('/signup')
+  } catch (error) {
+    console.error("error with signupPage")
+  }
 }
 
 const userDetails = ref ({
@@ -67,9 +71,9 @@ const login = async () => {
       </div>
       </div>
       <div class="action-button ion-padding">
-        <ion-button size="small" class="login-button" @click="login">Log in</ion-button>
+        <ion-button size="default" class="login-button" @click="login">Log in</ion-button>
         <p>or</p>
-        <ion-button class="signup-button" size="small" @click="signupPage">Sign Up</ion-button>
+        <ion-button class="signup-button" size="default" @click="signupPage">Sign Up</ion-button>
 
       </div>
 
@@ -115,12 +119,16 @@ ion-item {
 
 .login-form  {
   width: 100%;
+}
 
+ion-input {
+  --ion-text-color: #f8f8e5;;
 }
 
 .login-form ion-label,
 .login-form ion-input {
   color: #f8f8e5;
+
 }
   .action-button {
   text-align: center;

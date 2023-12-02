@@ -48,11 +48,11 @@ const signUp = async () => {
 
 <template>
   <ion-content>
-    <div class ="login-section ion-padding">
+    <div class ="signup-section ion-padding">
       <div class ="heading ion-padding">
         <h1>Create an Account</h1>
-      </div>
     </div>
+
       <div class="signup-form ion-padding">
         <div class ="form-input">
           <ion-icon name="name"></ion-icon>
@@ -81,13 +81,62 @@ const signUp = async () => {
         <ion-button size="small" class="login-button" @click="signUp">Sign Up</ion-button>
         </div>
     </div>
+    </div>
   </ion-content>
 </template>
 
 
 <style scoped>
-ion-content {
-  --background: linear-gradient(#465b6d, #f3a5a1);
+.heading h1 {
+  font-family: "Arial Rounded MT Bold";
+  font-size: 43px;
+  font-weight: bolder;
+  color: #f8f8e5;
 
 }
+
+ion-content {
+  background: linear-gradient(#465b6d, #f3a5a1);
+  --background: url("@/assets/mountains.png") center bottom no-repeat;
+  height: 100vh;
+}
+
+.signup-section {
+  height: 74vh;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+ion-item {
+  --border-radius: 15px;
+
+}
+.signup-form  {
+  width: 100%;
+}
+
+ion-input {
+  --ion-text-color: #f8f8e5;;
+}
+
+.login-form ion-label,
+.login-form ion-input {
+  color: #f8f8e5;
+
+}
+.action-button {
+  text-align: center;
+  .login-button {
+    --background: #352d16;
+  }
+  .signup-button {
+    --background: #352d16;
+
+  }
+}
+
 </style>
