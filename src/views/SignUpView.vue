@@ -78,7 +78,7 @@ const signUp = async () => {
         </div>
       </div>
       <div class="action-button ion-padding">
-        <ion-button size="small" class="login-button" @click="signUp">Sign Up</ion-button>
+        <ion-button size="default" class="signup-button" @click="signUp">Sign Up</ion-button>
         </div>
     </div>
     </div>
@@ -123,16 +123,14 @@ ion-input {
   --ion-text-color: #f8f8e5;;
 }
 
-.login-form ion-label,
-.login-form ion-input {
+
+.signup-form ion-label,
+.signup-form ion-input {
   color: #f8f8e5;
 
 }
 .action-button {
   text-align: center;
-  .login-button {
-    --background: #352d16;
-  }
   .signup-button {
     --background: #352d16;
 
