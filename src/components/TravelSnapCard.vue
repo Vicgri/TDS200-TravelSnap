@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import { IonCard, IonCardHeader, /*IonCardSubtitle,*/ IonCardTitle, IonCardContent } from "@ionic/vue";
 import TravelSnapImage from "../components/TravelSnapImage.vue";
+import { NewTravelSnap } from "@/models/TravelSnapModel";
 
 interface Props {
-	travel: {
-		id: number;
-		title: string;
-		description: string;
-		//hashtags: string[];
-		imageUrls: string[];
-		//comments: string[]
-	}
+	travel: NewTravelSnap 
 }
 
 defineProps<Props>();
