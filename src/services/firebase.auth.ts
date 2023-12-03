@@ -20,4 +20,7 @@ export const authService = {
     async currentUser() {
         return getAuth().currentUser
     }
+    
 }
+
+

@@ -1,16 +1,9 @@
 <script setup lang="ts">
 import {
-  IonSegment,
   IonButton,
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent ,
   IonInput,
   IonItem,
-  IonList,
-  IonSegmentButton,
 } from '@ionic/vue';
 import { authService } from "../services/firebase.auth"
 import { ref } from "vue"
