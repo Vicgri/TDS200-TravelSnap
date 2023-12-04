@@ -1,16 +1,9 @@
 <script setup lang="ts">
 import {
-  IonSegment,
   IonButton,
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent ,
   IonInput,
   IonItem,
-  IonList,
-  IonSegmentButton,
 } from '@ionic/vue';
 import { authService } from "../services/firebase.auth"
 import { ref } from "vue"
@@ -21,7 +14,7 @@ const router = useRouter()
 
 const signupPage = () => {
   try {
-    router.replace('/signup')
+    router.push('/signup')
   } catch (error) {
     console.error("error with signupPage")
   }
@@ -36,7 +29,7 @@ const login = async () => {
   try {
     await authService.login(userDetails.value.email, userDetails.value.password);
     console.log("login successful")
-    router.replace('/tabs/gallery');
+    router.push('/tabs/gallery');
   }
   catch (error) {
     console.error("error with login", error.message)

@@ -1,9 +1,7 @@
 <script setup lang ="ts">
 import {
   IonButton,
-  IonContent ,
-  IonInput,
-  IonItem,
+  IonContent,
 } from '@ionic/vue';
 import { authService } from "../services/firebase.auth"
 import { ref } from "vue"
@@ -12,9 +10,22 @@ import {arrowBack} from "ionicons/icons";
 
 const router = useRouter();
 
-const backToLogin =() => {
-  router.replace('/authentication')
+const backToGallery =() => {
+  router.push('/tabs/gallery')
 }
+
+const logout = async()=>{
+  try {
+    await authService.logout();
+    localStorage.removeItem("auth_token"); // Clear any locally stored tokens or user data
+    router.replace('/authentication'); // Redirect to the authentication page
+
+  } catch(error) {
+    console.error(error)
+  }
+
+}
+
 
 
 </script>
@@ -22,7 +33,7 @@ const backToLogin =() => {
 <template>
   <ion-content>
   <div class ="back-button ion padding">
-    <ion-button @click="backToLogin">
+    <ion-button @click="backToGallery">
       <ion-icon :icon="arrowBack"></ion-icon>
     </ion-button>
   </div>

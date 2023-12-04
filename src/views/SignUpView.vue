@@ -96,7 +96,7 @@ const postProfilePhoto = async () => {
     });
 
     await successToast.present();
-    router.replace('/home');
+    router.replace('/tabs/gallery');
 
   } catch (error) {
     const errorToast = await toastController.create({
