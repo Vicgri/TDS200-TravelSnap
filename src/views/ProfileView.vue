@@ -18,7 +18,7 @@ const logout = async()=>{
   try {
     await authService.logout();
     localStorage.removeItem("auth_token"); // Clear any locally stored tokens or user data
-    router.replace('/authentication'); // Redirect to the authentication page
+    router.push('/authentication'); // Redirect to the authentication page
 
   } catch(error) {
     console.error(error)
