@@ -4,6 +4,7 @@ import TabsPage from '../views/TabsPage.vue'
 import LogInView from "@/views/LogInView.vue";
 import SignUpView from "@/views/SignUpView.vue";
 
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -25,9 +26,10 @@ const routes: Array<RouteRecordRaw> = [
         redirect: '/tabs/gallery'
       },
       {
-        path: 'profile',
-        component: () => import  ("@/views/ProfileView.vue")
+        path: 'search',
+        component: () => import ("@/views/SearchView.vue")
       },
+
       {
         path: 'gallery',
         component: () => import ("@/views/GalleryView.vue")
@@ -37,9 +39,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import ("@/views/UploadView.vue")
       },
       {
-        path: 'search',
-        component: () => import ("@/views/SearchView.vue")
+        path: 'profile',
+        component: () => import  ("@/views/ProfileView.vue")
       }
+
     ]
   }
 ]
