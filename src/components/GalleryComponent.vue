@@ -1,32 +1,35 @@
 <script setup lang="ts">
-import {db} from "@/main";
+import { IonCard, IonCardHeader, /*IonCardSubtitle,*/ IonCardTitle, IonCardContent } from "@ionic/vue";
+import TravelSnapImage from "../components/TravelSnapImage.vue";
 
-import { getDocs,collection } from 'firebase/firestore/lite';
-const travelCollectionRef = collection(db, "travel")
-import {ref} from "vue";
-const allTravels = ref([]);
-const fetchTravel = async () => {
-  try{
-
-    // Get the document
-    const docSnap = await getDocs(travelCollectionRef);
-    // Access the document's data
-    if (!docSnap.empty) {
-      allTravels.value = docSnap.docs.map((doc) => doc.data)
-    } else {
-      console.log("No such document!");
-    }
-  } catch(error) {
-    console.error("Error fetching the camping spot", error)
-  }
-
+interface Props {
+  id: string;
+  imageUrls: string[];
+	title: string;
+  hashtags: string[];
 }
-fetchTravel()
-console.log(allTravels.value)
+
+defineProps<Props>();
+
 </script>
 
 <template>
-                         <h1>IT WORKS</h1>
+	<ion-card :router-link="'/detail/' + id">
+
+		<div v-for="(image, index) in imageUrls" :key="index">
+			<TravelSnapImage :image-url="image" />
+		</div>
+
+		<ion-card-header>
+			<!--<ion-card-subtitle>{{ spot.hashtags }}</ion-card-subtitle>-->
+			<ion-card-title>{{ title }}</ion-card-title>
+		</ion-card-header>
+
+		<ion-card-content>
+			{{ hashtags }}
+		</ion-card-content>
+
+	</ion-card>
 </template>
 
 <style scoped>
