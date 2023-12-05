@@ -122,7 +122,7 @@ const removeImagePreview = (index: number) => {
         <ion-buttons slot="start">
           <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
-        <ion-title>Legg til ny 🏕-plass</ion-title>
+        <ion-title>Add travel</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -132,7 +132,7 @@ const removeImagePreview = (index: number) => {
 
         <!-- Logic for file picking / using camera will be added later -->
         <ion-button @click="triggerCamera" class="image-picker" color="light">
-          Velg fil eller ta bilde 📸
+          Choose a file or take a photo 📸
         </ion-button>
 
         <section v-if="newTravelSnap.imageUrls.length">
@@ -146,17 +146,17 @@ const removeImagePreview = (index: number) => {
 
 
         <ion-item>
-          <ion-label class="label-mild" position="floating">Tittel</ion-label>
+          <ion-label class="label-mild" position="floating">Title</ion-label>
           <ion-input type="text" v-model="newTravelSnap.title"></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label class="label-mild" position="floating">Beskrivelse</ion-label>
+          <ion-label class="label-mild" position="floating">Description</ion-label>
           <ion-textarea type="password" v-model="newTravelSnap.description"></ion-textarea>
         </ion-item>
 
         <ion-item>
-          <ion-label class="label-mild" position="floating">Hashtag</ion-label>
+          <ion-label class="label-mild" position="floating">Hashtags</ion-label>
           <ion-input type="text" v-model="newHashtagText"></ion-input>
 
           <ion-button slot="end" color="dark" size="default" @click="addNewHashtag">
@@ -169,7 +169,7 @@ const removeImagePreview = (index: number) => {
         </ion-item>
 
         <ion-button @click="postNewTravelSnap" class="button-add" fill="solid" color="dark" size="default">
-          Send inn 🏕
+          Upload
         </ion-button>
 
       </ion-list>
@@ -196,7 +196,7 @@ ion-list {
 .image-picker {
   height: 20vh;
   margin: 10px;
-  border: 2px #8a8a8a dashed;
+  border: 2px #007B88 dashed;
   border-radius: 8px;
   font-size: medium;
 }
@@ -212,8 +212,8 @@ ion-list {
   margin-right: 10px;
 }
 ion-back-button::part(native) {
-  --background: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
-  --color: white;
+  --background: #352D16;;
+  --color: white; /*virker ikke*/
 }
 
 </style>

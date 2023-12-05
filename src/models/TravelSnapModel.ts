@@ -4,11 +4,17 @@ export interface NewTravelSnap {
     description: string;
     hashtags: string[];
     imageUrls: string[];
-    comments: string[];
+    comments: TravelComments[];
   }
   
   export interface NewTravelSnapResponse {
     travel_snap_by_id: NewTravelSnap;
+  }
+
+  export interface TravelComments {
+    id: number; 
+    userId: string;
+    text: string;
   }
   
   
