@@ -121,15 +121,8 @@ ion-item {
   width: 100%;
 }
 
-ion-input {
-  --ion-text-color: #f8f8e5;;
-}
 
-.login-form ion-label,
-.login-form ion-input {
-  color: #f8f8e5;
 
-}
   .action-button {
     text-align: center;
   }
