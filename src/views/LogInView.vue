@@ -103,10 +103,12 @@ ion-content {
   justify-content: center;
   align-items: center;
   margin: auto;
+
 }
 
 ion-item {
   --border-radius: 15px;
+
 
 }
 
@@ -115,7 +117,8 @@ ion-item {
 }
 
 ion-input {
-  --ion-text-color: #f8f8e5;;
+  --ion-text-color: #f8f8e5;
+
 }
 
 .login-form ion-label,
@@ -136,5 +139,6 @@ ion-input {
   p {
     color: #352d16
   }
+
 
 </style>
