@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 import { initializeApp } from "firebase/app";
-
+import { getFirestore } from 'firebase/firestore/lite';
 import { IonicVue } from '@ionic/vue';
 
 /* Core CSS required for Ionic components to work properly */
@@ -23,6 +23,7 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD_R-vJrkh4_nTfyDk7Hkky7K0FdsS6g0U",
@@ -33,7 +34,15 @@ const firebaseConfig = {
   appId: "1:2338160955:web:7d25275c4bd68d6501771e",
   measurementId: "G-6PS61DYRGL"
 };
-initializeApp(firebaseConfig)
+
+//initialize fra firebase appen
+const firebaseApp = initializeApp(firebaseConfig)
+// Get a reference to Firestore
+export const db = getFirestore(firebaseApp);
+
+// Get a reference to Firebase Storage
+// export const storage = firebase.storage();
+
 
 
 
@@ -43,7 +52,7 @@ const app = createApp(App)
 
 
 
-
+defineCustomElements(window);
 router.isReady().then(() => {
   app.mount('#app');
 });
