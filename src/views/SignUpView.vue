@@ -211,16 +211,7 @@ ion-item {
   width: 100%;
 }
 
-ion-input {
-  --ion-text-color: #f8f8e5;;
-}
 
-
-.signup-form ion-label,
-.signup-form ion-input {
-  color: #f8f8e5;
-
-}
 .action-button {
   text-align: center;
   .signup-button {

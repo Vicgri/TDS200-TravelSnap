@@ -116,16 +116,15 @@ ion-item {
   width: 100%;
 }
 
+<<<<<<< HEAD
 ion-input {
   --ion-text-color: #f8f8e5;
 
 }
+=======
+>>>>>>> ab2a0f893cdc170586b54cdd0883803c50f7ec92
 
-.login-form ion-label,
-.login-form ion-input {
-  color: #f8f8e5;
 
-}
   .action-button {
     text-align: center;
   }
