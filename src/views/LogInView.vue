@@ -116,14 +116,6 @@ ion-item {
   width: 100%;
 }
 
-<<<<<<< HEAD
-ion-input {
-  --ion-text-color: #f8f8e5;
-
-}
-=======
->>>>>>> ab2a0f893cdc170586b54cdd0883803c50f7ec92
-
 
   .action-button {
     text-align: center;

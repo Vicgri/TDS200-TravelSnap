@@ -4,6 +4,7 @@ import TabsPage from '../views/TabsPage.vue'
 
 import LogInView from "@/views/LogInView.vue";
 import SignUpView from "@/views/SignUpView.vue";
+import DetailView from "@/views/DetailView.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -18,6 +19,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/signup',
     component: SignUpView
+  },
+  {
+    path: '/detail/:id',
+    component: DetailView
   },
 
   { path: '/tabs',
