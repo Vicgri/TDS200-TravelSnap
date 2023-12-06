@@ -53,22 +53,20 @@ const login = async () => {
     localStorage.setItem("auth_token", idToken)
     console.log("login successful")
     router.replace('/tabs/gallery');
-  }
-  catch (error) {
+  } catch (error) {
     console.error("error with login", error.message)
   }
 }
-
-const signUp = async () => {
-  try {
-    await authService.signUp(userDetails.value.email, userDetails.value.password);
-    await postProfilePhoto();
-    await login()
-    router.replace('/tabs/gallery');
-  } catch (error) {
-    console.log("error with signing up", error.message)
+  const signUp = async () => {
+    try {
+      await authService.signUp(userDetails.value.email, userDetails.value.password);
+      await postProfilePhoto();
+      await login()
+      router.replace('/tabs/gallery');
+    } catch (error) {
+      console.log("error with signing up", error.message)
+    }
   }
-}
 
 const postProfilePhoto = async () => {
   if (userDetails.value.profilePicture === "") {
@@ -111,7 +109,6 @@ const postProfilePhoto = async () => {
   }
 
 }
-
 
 const backToLogin =() => {
   router.replace('/authentication')
@@ -211,16 +208,7 @@ ion-item {
   width: 100%;
 }
 
-ion-input {
-  --ion-text-color: #f8f8e5;;
-}
 
-
-.signup-form ion-label,
-.signup-form ion-input {
-  color: #f8f8e5;
-
-}
 .action-button {
   text-align: center;
   .signup-button {

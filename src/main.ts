@@ -36,7 +36,7 @@ const firebaseConfig = {
 };
 
 //initialize fra firebase appen
-const firebaseApp = initializeApp(firebaseConfig)
+export const firebaseApp = initializeApp(firebaseConfig)
 // Get a reference to Firestore
 export const db = getFirestore(firebaseApp);
 

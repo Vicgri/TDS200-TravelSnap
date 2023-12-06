@@ -14,14 +14,12 @@
       <div v-for="travel in allTravels" :key="travel.id">
        <GalleryComponent :id="travel.id" :title="travel.title" :image-urls="travel.imageUrls" :hashtags="travel.hashtags"/>
       </div>
-      <ExploreContainer name="Gallery" />
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, onIonViewDidEnter } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
 import GalleryComponent from "@/components/GalleryComponent.vue";
 import {db} from "@/main";
 import { getDocs,collection } from 'firebase/firestore/lite';
