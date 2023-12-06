@@ -12,7 +12,7 @@ import {
 
 import { useRouter } from 'vue-router';
 import TravelSnapImage from "@/components/TravelSnapImage.vue";
-import {NewTravelSnap} from "@/models/TravelSnapModel"
+import {NewTravelSnap, TravelComments} from "@/models/TravelSnapModel"
 import { Geolocation } from '@capacitor/geolocation';
 import { GoogleMap} from '@capacitor/google-maps';
 import { db } from "@/main";
@@ -110,7 +110,7 @@ const fetchTravel = async () => {
 
 } 
 
-/*const updateComments = async (updatedComments) => {
+const updateComments = async (updatedComments: TravelComments[]) => {
   try {
     await setDoc(travelDocRef, { comments: updatedComments }, { merge: true });
     travelSnap.value.comments = updatedComments;
@@ -125,11 +125,13 @@ const addNewComment = async () => {
       // Create a new comment object with an increased ID
       const newComment = {
         id: travelSnap.value?.comments? travelSnap.value?.comments.length + 1 : 1,
-        text: newCommentText.value
+        text: newCommentText.value,
+        userId: "byttes ut med brukernavn"
       };
 
-      const updatedComments = travelSnap.value?.comments ? [...travelSnap.value?.comments??[], newComment] : [newComment];
-      await updateComment(updatedComments);   
+      const updatedComments = travelSnap.value?.comments ? [...travelSnap.value?.comments??{}, newComment] : [newComment];
+      console.log(updatedComments);
+      await updateComments(updatedComments);   
       isModalOpen.value = false;
       newCommentText.value = '';
   } catch (error) {
@@ -145,14 +147,17 @@ const removeComment = async (commentId: number) => {
       throw new Error('Comment not found.');
     }
 
-    const updatedComments = travelSnap.value?.comments.filter(comment => comment.id !== commentId);
-    await updateComments(updatedComments);
+    const updatedComments = travelSnap.value?.comments.filter(comment => comment.id !== commentId)
+    
+    if (updatedComments) {
+      await updateComments(updatedComments);
+    }
   } catch (error) {
     console.error('Error removing comment from Firebase:', error);
   }
 };
 
-
+/*
 // Function to toggle the user's like status
     const toggleLikeStatus = async () => {
     try {

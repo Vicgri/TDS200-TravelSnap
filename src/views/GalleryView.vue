@@ -1,27 +1,5 @@
-<template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Gallery</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Gallery</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <div v-for="travel in allTravels" :key="travel.id">
-       <GalleryComponent :id="travel.id" :title="travel.title" :image-urls="travel.imageUrls" :hashtags="travel.hashtags"/>
-      </div>
-      <ExploreContainer name="Gallery" />
-    </ion-content>
-  </ion-page>
-</template>
-
 <script setup lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, onIonViewDidEnter } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
 import GalleryComponent from "@/components/GalleryComponent.vue";
 import {db} from "@/main";
 import { getDocs,collection } from 'firebase/firestore';
@@ -51,3 +29,23 @@ try{
 }
 
 </script>
+
+<template>
+  <ion-page>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Gallery</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content :fullscreen="true">
+      <ion-header collapse="condense">
+        <ion-toolbar>
+          <ion-title size="large">Gallery</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <div v-for="travel in allTravels" :key="travel.id">
+       <GalleryComponent :id="travel.id" :title="travel.title" :image-urls="travel.imageUrls" :hashtags="travel.hashtags"/>
+      </div>
+    </ion-content>
+  </ion-page>
+</template>
