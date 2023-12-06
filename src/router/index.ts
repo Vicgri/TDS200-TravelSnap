@@ -5,10 +5,7 @@ import TabsPage from '../views/TabsPage.vue'
 import LogInView from "@/views/LogInView.vue";
 import SignUpView from "@/views/SignUpView.vue";
 import DetailView from "@/views/DetailView.vue";
-<<<<<<< HEAD
-=======
 
->>>>>>> 307d9fae6a2912a549a57747485cb43ea970391e
 
 const routes: Array<RouteRecordRaw> = [
   {
