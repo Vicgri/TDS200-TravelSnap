@@ -1,8 +1,25 @@
 <script setup lang="ts">
-import { IonBackButton, IonButton, IonButtons, IonChip, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToolbar, toastController } from '@ionic/vue';
-import { add, trashOutline } from 'ionicons/icons';
-import { ref } from 'vue';
-import { Camera, CameraResultType } from '@capacitor/camera';
+import {
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonChip,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonPage,
+  IonTextarea,
+  IonTitle,
+  IonToolbar,
+  toastController,
+} from "@ionic/vue";
+import { add, trashOutline } from "ionicons/icons";
+import { ref } from "vue";
+import { Camera, CameraResultType } from "@capacitor/camera";
 import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
 import {
   getStorage,
@@ -12,8 +29,8 @@ import {
 } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 
-import { useRouter } from 'vue-router';
-import {NewTravelSnap} from "../models/TravelSnapModel"
+import { useRouter } from "vue-router";
+import { NewTravelSnap } from "../models/TravelSnapModel";
 
 const router = useRouter();
 // Keeps track of the input field for new hashtags
@@ -27,7 +44,8 @@ const newTravelSnap = ref<NewTravelSnap>({
   hashtags: [],
   imageUrls: [], // Array to store multiple image URLs
   comments: [],
-  id: ""
+  id: "",
+  location: { latitude: 0, longitude: 0 },
 });
 const travelCollection = collection(getFirestore(), "travel");
 // Add whatever is in the hashtag input field to the camp spot's array of hashtags
@@ -39,7 +57,7 @@ const addNewHashtag = () => {
   }
 
   // TODO Logic to avoid duplicate hashtags
-}
+};
 // Handle data POSTing
 const postNewTravelSnap = async () => {
   // TODO Logic to post the camp spot to the backend/Directus
@@ -52,8 +70,7 @@ const postNewTravelSnap = async () => {
     const generatedUUID = uuidv4();
     const newImageUrls = [];
     for (const imageUrl of newTravelSnap.value.imageUrls) {
-
-      const imageName = new Date().getTime() + '.jpg'; // generate a unique image name
+      const imageName = new Date().getTime() + ".jpg"; // generate a unique image name
       const storageRef = getStorage();
       const imageRef = dbRef(storageRef, `images/${imageName}`);
       const response = await fetch(imageUrl);
@@ -68,28 +85,26 @@ const postNewTravelSnap = async () => {
     newTravelSnap.value.id = generatedUUID;
     await setDoc(doc(travelCollection, generatedUUID), newTravelSnap.value);
     const successToast = await toastController.create({
-      message: 'Travel uploaded',
+      message: "Travel uploaded",
       duration: 1500,
-      position: 'bottom',
-      color: 'success'
+      position: "bottom",
+      color: "success",
     });
 
     await successToast.present();
-    router.replace('/home');
-
+    router.replace("/home");
   } catch (error) {
     const errorToast = await toastController.create({
-      message: 'Noe gikk galt ved opplasting av teltplass!',
+      message: "Noe gikk galt ved opplasting av teltplass!",
       duration: 2500,
-      position: 'bottom',
-      color: 'danger'
+      position: "bottom",
+      color: "danger",
     });
 
     await errorToast.present();
     console.error(error);
   }
-
-}
+};
 // Open the device's camera and/or file picker UI
 const triggerCamera = async () => {
   const photo = await Camera.getPhoto({
@@ -100,9 +115,7 @@ const triggerCamera = async () => {
   if (photo.webPath) {
     newTravelSnap.value.imageUrls.push(photo.webPath);
   }
-
 };
-
 
 // Handle (preview) image removal
 const removeImagePreview = (index: number) => {
@@ -111,8 +124,7 @@ const removeImagePreview = (index: number) => {
     // Remove the image URL at the specified index
     newTravelSnap.value.imageUrls.splice(index, 1);
   }
-}
-
+};
 </script>
 
 <template>
@@ -127,23 +139,32 @@ const removeImagePreview = (index: number) => {
     </ion-header>
 
     <ion-content :fullscreen="true">
-
       <ion-list>
-
         <!-- Logic for file picking / using camera will be added later -->
         <ion-button @click="triggerCamera" class="image-picker" color="light">
           Choose a file or take a photo 📸
         </ion-button>
 
         <section v-if="newTravelSnap.imageUrls.length">
-          <div v-for="(imageUrl, index) in newTravelSnap.imageUrls" :key="index"> <!--sto imageUrls-->
+          <div
+            v-for="(imageUrl, index) in newTravelSnap.imageUrls"
+            :key="index"
+          >
+            <!--sto imageUrls-->
             <img :src="imageUrl" />
-            <ion-button @click="() => removeImagePreview(index)" fill="default" class="remove-image-preview">
-              <ion-icon slot="icon-only" :icon="trashOutline" color="danger"></ion-icon>
+            <ion-button
+              @click="() => removeImagePreview(index)"
+              fill="default"
+              class="remove-image-preview"
+            >
+              <ion-icon
+                slot="icon-only"
+                :icon="trashOutline"
+                color="danger"
+              ></ion-icon>
             </ion-button>
           </div>
         </section>
-
 
         <ion-item>
           <ion-label class="label-mild" position="floating">Title</ion-label>
@@ -151,29 +172,63 @@ const removeImagePreview = (index: number) => {
         </ion-item>
 
         <ion-item>
-          <ion-label class="label-mild" position="floating">Description</ion-label>
-          <ion-textarea type="password" v-model="newTravelSnap.description"></ion-textarea>
+          <ion-label class="label-mild" position="floating"
+            >Description</ion-label
+          >
+          <ion-textarea
+            type="text"
+            v-model="newTravelSnap.description"
+          ></ion-textarea>
+        </ion-item>
+
+        <p class="label-mild" position="floating">Location</p>
+
+        <ion-item>
+          <ion-input
+            label="Latitude"
+            type="number"
+            v-model="newTravelSnap.location.latitude"
+          ></ion-input>
+          <ion-input
+            label="Longitude"
+            type="number"
+            v-model="newTravelSnap.location.longitude"
+          ></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label class="label-mild" position="floating">Hashtags</ion-label>
           <ion-input type="text" v-model="newHashtagText"></ion-input>
 
-          <ion-button slot="end" color="dark" size="default" @click="addNewHashtag">
+          <ion-button
+            slot="end"
+            color="dark"
+            size="default"
+            @click="addNewHashtag"
+          >
             <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-item>
 
         <ion-item lines="none">
-          <ion-chip color="primary" v-for="tag in newTravelSnap.hashtags" :key="tag">{{tag}}</ion-chip>
+          <ion-chip
+            color="primary"
+            v-for="tag in newTravelSnap.hashtags"
+            :key="tag"
+            >{{ tag }}</ion-chip
+          >
         </ion-item>
 
-        <ion-button @click="postNewTravelSnap" class="button-add" fill="solid" color="dark" size="default">
+        <ion-button
+          @click="postNewTravelSnap"
+          class="button-add"
+          fill="solid"
+          color="dark"
+          size="default"
+        >
           Upload
         </ion-button>
-
       </ion-list>
-
     </ion-content>
   </ion-page>
 </template>
@@ -196,7 +251,7 @@ ion-list {
 .image-picker {
   height: 20vh;
   margin: 10px;
-  border: 2px #007B88 dashed;
+  border: 2px #007b88 dashed;
   border-radius: 8px;
   font-size: medium;
 }
@@ -212,8 +267,7 @@ ion-list {
   margin-right: 10px;
 }
 ion-back-button::part(native) {
-  --background: #352D16;;
+  --background: #352d16;
   --color: white; /*virker ikke*/
 }
-
 </style>
