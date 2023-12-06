@@ -14,7 +14,7 @@ const router = useRouter()
 
 const signupPage = () => {
   try {
-    router.push('/signup')
+    router.replace('/signup')
   } catch (error) {
     console.error("error with signupPage")
   }
@@ -29,7 +29,7 @@ const login = async () => {
   try {
     await authService.login(userDetails.value.email, userDetails.value.password);
     console.log("login successful")
-    router.push('/tabs/gallery');
+    router.replace('/tabs/gallery');
   }
   catch (error) {
     console.error("error with login", error.message)
