@@ -24,7 +24,7 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, onIonViewDidEnter
 import ExploreContainer from '@/components/ExploreContainer.vue';
 import GalleryComponent from "@/components/GalleryComponent.vue";
 import {db} from "@/main";
-import { getDocs,collection } from 'firebase/firestore/lite';
+import { getDocs,collection } from 'firebase/firestore';
 
 const travelCollectionRef = collection(db, "travel")
 import {ref} from "vue";

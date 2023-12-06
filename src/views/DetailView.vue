@@ -6,12 +6,15 @@ import {
   collection,
   getDoc,
   setDoc,
+  updateDoc,
   doc,
 } from "firebase/firestore";
 
 import { useRouter } from 'vue-router';
 import TravelSnapImage from "@/components/TravelSnapImage.vue";
 import {NewTravelSnap} from "@/models/TravelSnapModel"
+import { Geolocation } from '@capacitor/geolocation';
+import { GoogleMap} from '@capacitor/google-maps';
 import { db } from "@/main";
 
 /* Using the route object, we can get data for the user's current route */
@@ -20,25 +23,74 @@ const route = useRoute();
 const { id } = route.params;
 const router = useRouter();
 
+const backToGallery =() => {
+  router.replace('tabs/gallery') //skal sende til galleryview.  ?
+}
+
 /* State */
 const isModalOpen = ref(false);
 const newCommentText = ref('');
 const isLoadingTravelSnap = ref(true);
 const travelSnap = ref<NewTravelSnap| null>(null); 
-/*
-const travelCollection = collection(db, "travel");
-const travelDocRef = doc(travelCollection, `${id}`);
+//const hasUserLiked = ref(false);
+//const currentUserData = ref(null);
+const googleMapsRef = ref(null);
 
-const backHome =() => {
-  router.replace('/home')
-}
+
+//const travelCollection = collection(db, `travel/${id}`);
+const travelDocRef = doc(db, `travel/${id}`);
 
 onIonViewDidEnter( async() => {
-  await fetchCampingSpot();
+  await fetchTravel();
+  await readGeoLocation();
+  //await checkUserLikeStatus();
 })
 
+const readGeoLocation = async() =>{
+try{
+      if(!travelSnap.value?.location) {
+          const position = await Geolocation.getCurrentPosition();
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          const location = {
+            latitude,
+            longitude,
+          };
+          await updateDoc(travelDocRef, { location });
+          travelSnap.value.location = location;
+      }
 
-const fetchCampingSpot = async () => {
+      console.log (process.env)
+       const myMap = await GoogleMap.create({
+        id: 'my-google-map', // Unique identifier for this map instance
+        element: googleMapsRef.value, // reference to the capacitor-google-map element
+        apiKey: process.env.MAPS_KEY, // Your Google Maps API Key
+        config: {
+          center: {
+            // The initial position to be rendered by the map
+            lat: travelSnap.value?.location?.latitude,
+            lng: travelSnap.value?.location?.longitude,
+          },
+          zoom: 16, // The initial zoom level to be rendered by the map
+        },
+      })
+      const markerId = await myMap.addMarker({
+        coordinate: {
+            lat: travelSnap.value?.location?.latitude,
+            lng: travelSnap.value?.location?.longitude,
+        }
+      });  
+      
+      //await myMap.removeMarker(markerId);
+
+  }
+
+  catch (error) {
+      console.error('An error occured trying to get location:', error);
+  }
+}
+
+const fetchTravel = async () => {
   try{
     let travels: NewTravelSnap | null= null;
 
@@ -53,12 +105,12 @@ const fetchCampingSpot = async () => {
       console.log("No such document!");
     }
   } catch(error) {
-    console.error("Error fetching the camping spot", error)
+    console.error("An error occured fetching travel", error)
   }
 
 } 
 
-const updateComments = async (updatedComments) => {
+/*const updateComments = async (updatedComments) => {
   try {
     await setDoc(travelDocRef, { comments: updatedComments }, { merge: true });
     travelSnap.value.comments = updatedComments;
@@ -100,6 +152,38 @@ const removeComment = async (commentId: number) => {
   }
 };
 
+
+// Function to toggle the user's like status
+    const toggleLikeStatus = async () => {
+    try {
+      if (currentUserData.value) {
+        console.log(currentUserData.value.email)
+        const docSnapshot = await getDoc(travelSnapDocRef);
+        const docData = docSnapshot.data();
+        // Check if the user has already liked the travel post
+        if (docData.userWhoLiked && docData.userWhoLiked.includes(currentUserData.value.email)) {
+          // User has liked, so remove their like
+          const updatedLikes = docData.userWhoLiked.filter((userId) => userId !== currentUserData.value.email);
+          console.log(updatedLikes)
+          await setDoc(travelSnapDocRef, { userWhoLiked: updatedLikes }, { merge: true });   
+          travelSnap.value.userWhoLiked = updatedLikes;
+        } else {
+          // User has not liked, so add their like
+          const updatedLikes = [...(docData.userWhoLiked || []), currentUserData.value.email];
+                    console.log(updatedLikes)
+          await setDoc(travelSnapDocRef, { userWhoLiked: updatedLikes }, { merge: true });   
+          travelSnap.value.userWhoLiked = updatedLikes;
+        }
+
+        hasUserLiked.value = !hasUserLiked.value;
+
+      }
+    } catch (error) {
+      console.error('Error toggling like status:', error);
+    }
+    
+  }; 
+  
 */
 </script>
 
@@ -109,7 +193,7 @@ const removeComment = async (commentId: number) => {
       <ion-toolbar>
         <ion-title>Details</ion-title>   
         <ion-buttons slot="start">
-            <ion-button @click="backHome">
+            <ion-button @click="backToGallery">
                 <ion-icon :icon="arrowBack"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -140,7 +224,13 @@ const removeComment = async (commentId: number) => {
           <ion-card-subtitle>Description</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          {{travelSnap.description}}         
+          {{travelSnap.description}}  
+          <div v-if="travelSnap.location">
+            Geolocation: <ion-chip>Latitude: {{travelSnap.location.latitude}}, Longitude:  {{travelSnap.location.longitude}}</ion-chip>
+          </div>
+          <div>
+            <capacitor-google-map ref="googleMapsRef" style="display: inline-block; width: 60%; height: 400px;"></capacitor-google-map>
+          </div>       
         </ion-card-content>
       </ion-card>
 

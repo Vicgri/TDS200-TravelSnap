@@ -1,3 +1,4 @@
+
 export interface NewTravelSnap {
     id: string;
     title: string;
@@ -5,6 +6,7 @@ export interface NewTravelSnap {
     hashtags: string[];
     imageUrls: string[];
     comments: TravelComments[];
+    location: TravelLocation;
   }
   
   export interface NewTravelSnapResponse {
@@ -15,6 +17,11 @@ export interface NewTravelSnap {
     id: number; 
     userId: string;
     text: string;
+  }
+
+  export interface TravelLocation {
+    latitude: number;
+    longitude: number;
   }
   
   
