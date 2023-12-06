@@ -19,8 +19,9 @@
         </ion-tab-button>
 
         <ion-tab-button tab="profile" href="/tabs/profile">
-          <ion-icon aria-hidden="true" :icon="woman" />
+          <ion-icon aria-hidden="true" :icon="person" />
           <ion-label>Profile</ion-label>
+
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
@@ -29,5 +30,5 @@
 
 <script setup lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
-import {logIn, search, square, star, woman} from 'ionicons/icons';
+import {person, search, square, star} from 'ionicons/icons';
 </script>

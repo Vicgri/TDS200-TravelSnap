@@ -23,7 +23,7 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { defineCustomElements } from '@ionic/pwa-elements/loader'
 
 const firebaseConfig = {
   apiKey: "AIzaSyD_R-vJrkh4_nTfyDk7Hkky7K0FdsS6g0U",
@@ -47,8 +47,8 @@ export const db = getFirestore(firebaseApp);
 
 
 const app = createApp(App)
-  .use(IonicVue)
-  .use(router);
+    .use(IonicVue)
+    .use(router);
 
 defineCustomElements(window);
 router.isReady().then(() => {
