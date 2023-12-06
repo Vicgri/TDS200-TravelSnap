@@ -85,9 +85,11 @@ const logout = async()=>{
   </div>
 
   <div class ="profile-section ion-padding">
-    <div class ="heading ion-padding">
-      <h1>Welcome</h1>
-    </div>
+    <h2>Welcome</h2>
+    <ion-content class ="heading ion-padding"  v-if="currentUserData">>
+      <h2>{{ currentUserData.displayName }}</h2>
+      <p>{{ currentUserData.email }}</p>
+    </ion-content>
     <div class="information-section">
       <ion-avatar>
         <img :src="profileImageSrc" alt="Profile Image"/>
