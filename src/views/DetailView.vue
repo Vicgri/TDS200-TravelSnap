@@ -15,7 +15,7 @@ import TravelSnapImage from "@/components/TravelSnapImage.vue";
 import {NewTravelSnap, TravelComments} from "@/models/TravelSnapModel"
 import { Geolocation } from '@capacitor/geolocation';
 import { GoogleMap} from '@capacitor/google-maps';
-import { db } from "@/main";
+import { db, auth } from "@/main";
 
 /* Using the route object, we can get data for the user's current route */
 const route = useRoute();
@@ -33,7 +33,7 @@ const newCommentText = ref('');
 const isLoadingTravelSnap = ref(true);
 const travelSnap = ref<NewTravelSnap| null>(null); 
 //const hasUserLiked = ref(false);
-//const currentUserData = ref(null);
+const currentUserData = ref(null);
 const googleMapsRef = ref(null);
 
 
@@ -44,6 +44,7 @@ onIonViewDidEnter( async() => {
   await fetchTravel();
   await readGeoLocation();
   //await checkUserLikeStatus();
+  currentUserData.value = auth;
 })
 
 const readGeoLocation = async() =>{
@@ -119,14 +120,14 @@ const updateComments = async (updatedComments: TravelComments[]) => {
   }
 };
 
-
+console.log(currentUserData.value) //value er null og de. skal egentlig være currentUserData ? 
 const addNewComment = async () => {
   try {
       // Create a new comment object with an increased ID
       const newComment = {
         id: travelSnap.value?.comments? travelSnap.value?.comments.length + 1 : 1,
         text: newCommentText.value,
-        userId: "byttes ut med brukernavn"
+        userId: currentUserData.value.name
       };
 
       const updatedComments = travelSnap.value?.comments ? [...travelSnap.value?.comments??{}, newComment] : [newComment];
