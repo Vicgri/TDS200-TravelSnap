@@ -38,7 +38,6 @@ const fetchTravels = async () => {
 };
 </script>
 
-
 <template>
   <ion-page>
     <ion-header>
@@ -49,7 +48,13 @@ const fetchTravels = async () => {
     <ion-content :fullscreen="true">
       <ion-grid>
         <ion-row>
-          <ion-col v-for="travel in allTravels" :key="travel.id" size="12" size-md="6" size-lg="4">
+          <ion-col
+            v-for="travel in allTravels"
+            :key="travel.id"
+            size="12"
+            size-md="6"
+            size-lg="4"
+          >
             <ion-card>
               <GalleryComponent
                 :id="travel.id"
@@ -57,7 +62,11 @@ const fetchTravels = async () => {
                 :image-urls="travel.imageUrls"
               />
               <ion-chip-group>
-                <ion-chip v-for="hashtag in travel.hashtags" :key="hashtag" class="hashtag">
+                <ion-chip
+                  v-for="hashtag in travel.hashtags"
+                  :key="hashtag"
+                  class="hashtag"
+                >
                   {{ hashtag }}
                 </ion-chip>
               </ion-chip-group>
@@ -70,10 +79,10 @@ const fetchTravels = async () => {
 </template>
 
 <style>
-  .hashtag {
-    --ion-background-color: #f2f2f2; /* Lysere bakgrunnsfarge */
-    --ion-color: #666; /* Mørkere tekstfarge */
-    margin-right: 8px;
-    font-size: 0.9rem;
-  }
+.hashtag {
+  --ion-background-color: #f2f2f2; /* Lysere bakgrunnsfarge */
+  --ion-color: #666; /* Mørkere tekstfarge */
+  margin-right: 8px;
+  font-size: 0.9rem;
+}
 </style>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {
-  IonBackButton,
   IonButton,
   IonButtons,
   IonChip,
@@ -48,19 +47,15 @@ const newTravelSnap = ref<NewTravelSnap>({
   location: { latitude: 0, longitude: 0 },
 });
 const travelCollection = collection(getFirestore(), "travel");
-// Add whatever is in the hashtag input field to the camp spot's array of hashtags
+
 const addNewHashtag = () => {
-  // Avoid adding empty hashtags
   if (newHashtagText.value) {
     newTravelSnap.value.hashtags.push(newHashtagText.value); // LES: Det er ikke farlig hvis du får røde squiggly lines her, det skal vi senere fikse med TypeScript
     newHashtagText.value = "";
   }
-
-  // TODO Logic to avoid duplicate hashtags
 };
-// Handle data POSTing
+
 const postNewTravelSnap = async () => {
-  // TODO Logic to post the camp spot to the backend/Directus
   if (newTravelSnap.value.imageUrls.length === 0) {
     alert("Upload minimum one photo");
     return;
@@ -131,30 +126,30 @@ const removeImagePreview = (index: number) => {
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-back-button default-href="/"></ion-back-button>
-        </ion-buttons>
-        <ion-title>Add travel</ion-title>
+        <ion-title>Add Travel</ion-title>
       </ion-toolbar>
     </ion-header>
 
     <ion-content :fullscreen="true">
       <ion-list>
-        <!-- Logic for file picking / using camera will be added later -->
-        <ion-button @click="triggerCamera" class="image-picker" color="light">
-          Choose a file or take a photo 📸
+        <ion-button
+          @click="triggerCamera"
+          class="image-picker"
+          color="gradient-primary"
+        >
+          Upload a file or take a photo 📸
         </ion-button>
 
+        <!-- Image previews -->
         <section v-if="newTravelSnap.imageUrls.length">
           <div
             v-for="(imageUrl, index) in newTravelSnap.imageUrls"
             :key="index"
           >
-            <!--sto imageUrls-->
             <img :src="imageUrl" />
             <ion-button
               @click="() => removeImagePreview(index)"
-              fill="default"
+              fill="clear"
               class="remove-image-preview"
             >
               <ion-icon
@@ -166,65 +161,66 @@ const removeImagePreview = (index: number) => {
           </div>
         </section>
 
+        <!-- Title input -->
         <ion-item>
-          <ion-label class="label-mild" position="floating">Title</ion-label>
+          <ion-label position="floating">Title</ion-label>
           <ion-input type="text" v-model="newTravelSnap.title"></ion-input>
         </ion-item>
 
+        <!-- Description textarea -->
         <ion-item>
-          <ion-label class="label-mild" position="floating"
-            >Description</ion-label
-          >
+          <ion-label position="floating">Description</ion-label>
           <ion-textarea
             type="text"
             v-model="newTravelSnap.description"
           ></ion-textarea>
         </ion-item>
 
-        <p class="label-mild" position="floating">Location</p>
-
+        <!-- Location inputs -->
         <ion-item>
-          <ion-input
-            label="Latitude"
-            type="number"
-            v-model="newTravelSnap.location.latitude"
-          ></ion-input>
-          <ion-input
-            label="Longitude"
-            type="number"
-            v-model="newTravelSnap.location.longitude"
-          ></ion-input>
+          <ion-row>
+            <ion-col>
+              <ion-label class="label-mild">Latitude</ion-label>
+              <ion-input
+                type="number"
+                v-model="newTravelSnap.location.latitude"
+              ></ion-input>
+            </ion-col>
+            <ion-col>
+              <ion-label class="label-mild">Longitude</ion-label>
+              <ion-input
+                type="number"
+                v-model="newTravelSnap.location.longitude"
+              ></ion-input>
+            </ion-col>
+          </ion-row>
         </ion-item>
 
+        <!-- Hashtag input -->
         <ion-item>
-          <ion-label class="label-mild" position="floating">Hashtags</ion-label>
+          <ion-label position="floating">Hashtags</ion-label>
           <ion-input type="text" v-model="newHashtagText"></ion-input>
-
-          <ion-button
-            slot="end"
-            color="dark"
-            size="default"
-            @click="addNewHashtag"
-          >
+          <ion-button slot="end" style="color: #ffffff" @click="addNewHashtag">
             <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-item>
 
+        <!-- Display selected hashtags -->
         <ion-item lines="none">
           <ion-chip
-            color="primary"
             v-for="tag in newTravelSnap.hashtags"
             :key="tag"
+            color="tertiary"
             >{{ tag }}</ion-chip
           >
         </ion-item>
 
+        <!-- Upload button -->
         <ion-button
           @click="postNewTravelSnap"
           class="button-add"
           fill="solid"
-          color="dark"
-          size="default"
+          color="success"
         >
           Upload
         </ion-button>
@@ -244,18 +240,14 @@ ion-list {
   flex-direction: column;
 }
 
-.label-mild {
-  --color: #8a8a8a !important;
-}
-
 .image-picker {
   height: 20vh;
   margin: 10px;
-  border: 2px #007b88 dashed;
   border-radius: 8px;
   font-size: medium;
+  background: linear-gradient(to bottom, #465b6d, #465b6d) !important;
+  color: white !important;
 }
-
 .remove-image-preview {
   position: absolute;
   right: 0;
@@ -265,9 +257,5 @@ ion-list {
   margin-top: 50px;
   margin-left: 10px;
   margin-right: 10px;
-}
-ion-back-button::part(native) {
-  --background: #352d16;
-  --color: white; /*virker ikke*/
 }
 </style>
