@@ -95,7 +95,7 @@ const postNewTravelSnap = async () => {
     router.replace("/home");
   } catch (error) {
     const errorToast = await toastController.create({
-      message: "Noe gikk galt ved opplasting av teltplass!",
+      message: "Ops.. Something went wrong uploading your travel",
       duration: 2500,
       position: "bottom",
       color: "danger",

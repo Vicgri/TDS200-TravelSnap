@@ -78,7 +78,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'upload',
         component: () => import ("@/views/UploadView.vue"),
-        beforeEnter: [authenticationRouteGuard]
+        //beforeEnter: [authenticationRouteGuard]
       },
       {
         path: 'profile',

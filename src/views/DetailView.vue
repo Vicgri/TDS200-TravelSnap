@@ -216,7 +216,6 @@ const removeComment = async (commentId: number) => {
 
     <ion-content :fullscreen="true" v-if="travelSnap && !isLoadingTravelSnap">
 
-      <!-- Hero image section -->
       <div v-for="(image, index) in travelSnap.imageUrls" :key="index">
         <travel-snap-image :image-url="image" />
       </div>
