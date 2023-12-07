@@ -79,26 +79,24 @@ const readGeoLocation = async () => {
 
     console.log(process.env);
     const myMap = await GoogleMap.create({
-      id: "my-google-map", // Unique identifier for this map instance
-      element: googleMapsRef.value, // reference to the capacitor-google-map element
-      apiKey: process.env.MAPS_KEY, // Your Google Maps API Key
+      id: "my-google-map",
+      element: googleMapsRef.value,
+      apiKey: process.env.MAPS_KEY,
       config: {
         center: {
-          // The initial position to be rendered by the map
           lat: travelSnap.value?.location?.latitude,
           lng: travelSnap.value?.location?.longitude,
         },
-        zoom: 16, // The initial zoom level to be rendered by the map
+        zoom: 16,
       },
     });
+
     const markerId = await myMap.addMarker({
       coordinate: {
         lat: travelSnap.value?.location?.latitude,
         lng: travelSnap.value?.location?.longitude,
       },
     });
-
-    //await myMap.removeMarker(markerId);
   } catch (error) {
     console.error("An error occured trying to get location:", error);
   }
@@ -177,38 +175,6 @@ const removeComment = async (commentId: number) => {
     console.error("Error removing comment from Firebase:", error);
   }
 };
-
-/*
-// Function to toggle the user's like status
-    const toggleLikeStatus = async () => {
-    try {
-      if (currentUserData.value) {
-        console.log(currentUserData.value.email)
-        const docSnapshot = await getDoc(travelSnapDocRef);
-        const docData = docSnapshot.data();
-        // Check if the user has already liked the travel post
-        if (docData.userWhoLiked && docData.userWhoLiked.includes(currentUserData.value.email)) {
-          // User has liked, so remove their like
-          const updatedLikes = docData.userWhoLiked.filter((userId) => userId !== currentUserData.value.email);
-          console.log(updatedLikes)
-          await setDoc(travelSnapDocRef, { userWhoLiked: updatedLikes }, { merge: true });   
-          travelSnap.value.userWhoLiked = updatedLikes;
-        } else {
-          // User has not liked, so add their like
-          const updatedLikes = [...(docData.userWhoLiked || []), currentUserData.value.email];
-                    console.log(updatedLikes)
-          await setDoc(travelSnapDocRef, { userWhoLiked: updatedLikes }, { merge: true });   
-          travelSnap.value.userWhoLiked = updatedLikes;
-        }
-
-        hasUserLiked.value = !hasUserLiked.value;
-
-      }
-    } catch (error) {
-      console.error('Error toggling like status:', error);
-    }
-  }; 
-*/
 </script>
 
 <template>
@@ -230,11 +196,10 @@ const removeComment = async (commentId: number) => {
     </ion-header>
 
     <ion-content :fullscreen="true" v-if="travelSnap && !isLoadingTravelSnap">
-      <div v-for="(image, index) in travelSnap.imageUrls" :key="index">
-        <travel-snap-image :image-url="image" />
-      </div>
-
       <ion-card>
+        <div v-for="(image, index) in travelSnap.imageUrls" :key="index">
+          <travel-snap-image :image-url="image" />
+        </div>
         <ion-card-header>
           <ion-card-subtitle>Description</ion-card-subtitle>
         </ion-card-header>
@@ -302,7 +267,9 @@ const removeComment = async (commentId: number) => {
       >
         <ion-content>
           <ion-item lines="none">
-            <ion-label position="floating">New comment</ion-label>
+            <ion-label class="comment-label" position="floating"
+              >New comment</ion-label
+            >
             <ion-textarea v-model="newCommentText"></ion-textarea>
             <ion-button @click="addNewComment">Add comment</ion-button>
           </ion-item>
@@ -326,21 +293,30 @@ const removeComment = async (commentId: number) => {
 }
 
 .comment-text {
-  flex: 1; /* This allows the text to take up the available space, pushing the icon to the far right */
+  flex: 1;
 }
 ion-chip {
-  --ion-background-color: #e0e0e0; /* Bakgrunnsfarge */
-  --ion-color: #000; /* Tekstfarge (endret til svart) */
+  --ion-background-color: #e0e0e0;
+  --ion-color: #000;
   margin-right: 8px;
   font-size: 0.9rem;
 }
 
 ion-button::part(native) {
   --background: #352d16;
-  --color: white;
+  --color: #ffffff;
 }
 #commentButton::part(native) {
-  --background: white;
+  --background: #ffffff;
   --color: #352d16;
+}
+
+.comment-label {
+  margin-bottom: 20px;
+}
+ion-textarea {
+  --background: rgba(128, 128, 128, 0.1);
+  border-radius: 10px;
+  margin-top: 10px;
 }
 </style>

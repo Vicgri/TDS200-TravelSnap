@@ -32,3 +32,4 @@
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
 import {person, search, square, star} from 'ionicons/icons';
 </script>
+

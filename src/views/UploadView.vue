@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   IonButton,
-  IonButtons,
   IonChip,
   IonContent,
   IonHeader,
@@ -15,6 +14,7 @@ import {
   IonTitle,
   IonToolbar,
   toastController,
+  IonAlert,
 } from "@ionic/vue";
 import { add, trashOutline } from "ionicons/icons";
 import { ref } from "vue";
@@ -34,14 +34,13 @@ import { NewTravelSnap } from "../models/TravelSnapModel";
 const router = useRouter();
 // Keeps track of the input field for new hashtags
 const newHashtagText = ref("");
-
-// Keeps track of all data input from the user towards adding a new camp spot
+const alertButtons: { text: string }[] = [{ text: "OK" }];
 
 const newTravelSnap = ref<NewTravelSnap>({
   title: "",
   description: "",
   hashtags: [],
-  imageUrls: [], // Array to store multiple image URLs
+  imageUrls: [],
   comments: [],
   id: "",
   location: { latitude: 0, longitude: 0 },
@@ -50,14 +49,17 @@ const travelCollection = collection(getFirestore(), "travel");
 
 const addNewHashtag = () => {
   if (newHashtagText.value) {
-    newTravelSnap.value.hashtags.push(newHashtagText.value); // LES: Det er ikke farlig hvis du får røde squiggly lines her, det skal vi senere fikse med TypeScript
+    newTravelSnap.value.hashtags.push(newHashtagText.value);
     newHashtagText.value = "";
   }
 };
 
 const postNewTravelSnap = async () => {
   if (newTravelSnap.value.imageUrls.length === 0) {
-    alert("Upload minimum one photo");
+    const alert = document.getElementById("upload-alert");
+    if (alert) {
+      await alert.present();
+    }
     return;
   }
 
@@ -85,21 +87,12 @@ const postNewTravelSnap = async () => {
       position: "bottom",
       color: "success",
     });
-
     await successToast.present();
-    router.replace("/home");
   } catch (error) {
-    const errorToast = await toastController.create({
-      message: "Ops.. Something went wrong uploading your travel",
-      duration: 2500,
-      position: "bottom",
-      color: "danger",
-    });
-
-    await errorToast.present();
-    console.error(error);
+    console.error("Error uploading travel:", error);
   }
 };
+
 // Open the device's camera and/or file picker UI
 const triggerCamera = async () => {
   const photo = await Camera.getPhoto({
@@ -200,7 +193,11 @@ const removeImagePreview = (index: number) => {
         <ion-item>
           <ion-label position="floating">Hashtags</ion-label>
           <ion-input type="text" v-model="newHashtagText"></ion-input>
-          <ion-button slot="end" style="color: #ffffff" @click="addNewHashtag">
+          <ion-button
+            slot="end"
+            style="--background: #352d16; --color: #ffffff"
+            @click="addNewHashtag"
+          >
             <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-item>
@@ -216,14 +213,13 @@ const removeImagePreview = (index: number) => {
         </ion-item>
 
         <!-- Upload button -->
-        <ion-button
-          @click="postNewTravelSnap"
-          class="button-add"
-          fill="solid"
-          color="success"
-        >
-          Upload
-        </ion-button>
+        <ion-button class="upload-button" @click="postNewTravelSnap">Upload</ion-button>
+        <ion-alert
+          id="upload-alert"
+          header="Error"
+          message="Upload minimum one photo"
+          :buttons="alertButtons"
+        ></ion-alert>
       </ion-list>
     </ion-content>
   </ion-page>
@@ -245,17 +241,18 @@ ion-list {
   margin: 10px;
   border-radius: 8px;
   font-size: medium;
-  background: linear-gradient(to bottom, #465b6d, #465b6d) !important;
-  color: white !important;
+  background: linear-gradient(to bottom, #465b6d, #F3A5A1) !important;
+  color: #ffffff !important;
 }
 .remove-image-preview {
   position: absolute;
   right: 0;
 }
 
-.button-add {
-  margin-top: 50px;
-  margin-left: 10px;
-  margin-right: 10px;
+.upload-button {
+  --background: #465b6d; /* Change the background color to your preferred color */
+  --border-radius: 20px; /* Change the border radius to your preferred value */
+  color: #ffffff; /* Change the text color to contrast with the background */
+  font-weight: bold; /* Optionally make the text bold */
 }
 </style>

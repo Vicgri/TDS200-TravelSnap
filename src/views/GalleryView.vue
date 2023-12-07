@@ -80,8 +80,8 @@ const fetchTravels = async () => {
 
 <style>
 .hashtag {
-  --ion-background-color: #f2f2f2; /* Lysere bakgrunnsfarge */
-  --ion-color: #666; /* Mørkere tekstfarge */
+  --ion-background-color: #f2f2f2; 
+  --ion-color: #666; 
   margin-right: 8px;
   font-size: 0.9rem;
 }
