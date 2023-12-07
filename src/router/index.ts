@@ -56,8 +56,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/detail/:id",
-    component: DetailView,
-    beforeEnter: [authenticationRouteGuard]
+    component: DetailView
   },
   { path: '/tabs',
     component: TabsPage,
