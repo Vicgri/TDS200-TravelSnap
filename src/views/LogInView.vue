@@ -8,6 +8,7 @@ import {
 import { authService } from "../services/firebase.auth"
 import { ref } from "vue"
 import { useRouter } from "vue-router";
+import { IonIcon } from '@ionic/vue';
 
 
 const router = useRouter()

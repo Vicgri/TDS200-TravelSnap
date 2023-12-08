@@ -5,11 +5,14 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <div>
-        <input v-model="searchTerm" />
-        <button @click="search">Search</button>
-        <div v-if="searchResults.length">
-
+      <div class="search-input">
+        <ion-item>
+          <ion-label position="floating">Search location name</ion-label>
+          <ion-input type="search" v-model="searchTerm"></ion-input>
+        </ion-item>
+      <ion-button @click="search" size="small">Search</ion-button>
+      </div>
+      <div v-if="searchResults.length">
           <ion-grid>
             <ion-row>
               <ion-col
@@ -42,24 +45,27 @@
               <hr />
             </div>
         </div>
-      </div>
+
     </ion-content>
 </template>
 
-<script lang="ts">import { db } from "@/main";
+<script lang="ts">
+
+import { db } from "@/main";
 import { collection, query, where, getDocs } from "firebase/firestore"
 import { NewTravelSnap } from "@/models/TravelSnapModel";
-import {ref} from "vue/dist/vue";
 import GalleryComponent from "@/components/GalleryComponent.vue";
+import {IonInput, IonItem} from "@ionic/vue";
+
 
 export const getTravels = async (searchTerm: string) => {
-  const q = query(collection(db, 'travel'), where('title', '==', searchTerm));
-  const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map((doc) => doc.data())as NewTravelSnap [];
+    const q = query(collection(db, 'travel'), where('title', '==', searchTerm));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((doc) => doc.data()) as NewTravelSnap[];
 };
 
 export default {
-  components: {GalleryComponent},
+  components: {IonItem, IonInput, GalleryComponent},
   data() {
     return {
       searchTerm: '',
@@ -74,5 +80,17 @@ export default {
 };
 
 
-
 </script>
+
+<style scoped>
+.search-input {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+
+
+</style>
