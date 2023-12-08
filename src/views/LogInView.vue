@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {
   IonButton,
-  IonContent ,
+  IonContent,
   IonInput,
-  IonItem,
+  IonItem, toastController,
 } from '@ionic/vue';
 import { authService } from "../services/firebase.auth"
 import { ref } from "vue"
@@ -33,7 +33,15 @@ const login = async () => {
     router.replace('/tabs/gallery');
   }
   catch (error) {
-    console.error("error with login", error.message)
+    const errorToast = await toastController.create({
+      message: 'Login unsuccessful. Please sign up or check if the email and password is correct.',
+      duration: 3500,
+      position: 'bottom',
+      color: 'danger'
+    });
+
+    await errorToast.present();
+    console.error(error);
   }
 }
 

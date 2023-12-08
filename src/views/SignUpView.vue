@@ -64,13 +64,21 @@ const login = async () => {
       await login()
       router.replace('/tabs/gallery');
     } catch (error) {
-      console.log("error with signing up", error.message)
+      const errorToast = await toastController.create({
+        message: 'Signing up was unsuccessful. Please try again.',
+        duration: 3500,
+        position: 'bottom',
+        color: 'danger'
+      });
+
+      await errorToast.present();
+      console.error(error);
     }
   }
 
 const postProfilePhoto = async () => {
   if (userDetails.value.profilePicture === "") {
-    alert("You must upload a profile picture");
+    alert("You must upload a profile picture!");
     return;
   }
   try {
