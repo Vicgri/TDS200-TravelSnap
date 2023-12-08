@@ -24,9 +24,6 @@ const userProfiles = ref([]);
 const profileImageSrc = ref(null);
 
 
-const backToGallery =() => {
-  router.push('/tabs/gallery')
-}
 onIonViewDidEnter(async()=>{
   currentUserData.value = await authService.currentUser();
   await loadProfileImage();
@@ -78,12 +75,6 @@ const logout = async()=>{
     </ion-toolbar>
   </ion-header>
   <ion-content>
-  <div class ="back-button ion padding">
-    <ion-button @click="backToGallery">
-      <ion-icon :icon="arrowBack"></ion-icon>
-    </ion-button>
-  </div>
-
   <div class ="profile-section ion-padding">
     <h2>Welcome</h2>
     <ion-content class ="heading ion-padding"  v-if="currentUserData">>
@@ -93,7 +84,6 @@ const logout = async()=>{
         <img :src="profileImageSrc" alt="Profile Image"/>
       </ion-avatar>
     </div>
-
     <div class="action-button ion-padding">
       <ion-button size="default" class="logout-button" @click="logout">Log out</ion-button>
     </div>
@@ -131,7 +121,4 @@ ion-content {
   }
 }
 
-.back-button ion-button {
-  --background: #352d16;
-}
 </style>

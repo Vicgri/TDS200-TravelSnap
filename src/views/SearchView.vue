@@ -1,7 +1,7 @@
 <template>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Search Page</ion-title>
+        <ion-title>Search</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -58,9 +58,10 @@ import GalleryComponent from "@/components/GalleryComponent.vue";
 import {IonInput, IonItem} from "@ionic/vue";
 
 
+
 export const getTravels = async (searchTerm: string) => {
-    const q = query(collection(db, 'travel'), where('title', '==', searchTerm));
-    const querySnapshot = await getDocs(q);
+    const travels = query(collection(db, 'travel'), where('title', '==', searchTerm));
+    const querySnapshot = await getDocs(travels);
     return querySnapshot.docs.map((doc) => doc.data()) as NewTravelSnap[];
 };
 
@@ -91,6 +92,9 @@ export default {
   padding-left: 20px;
 }
 
+ion-button {
+  --background: #352d16;
+}
 
 
 </style>
