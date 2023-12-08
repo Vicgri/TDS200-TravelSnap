@@ -43,16 +43,17 @@ const routes: Array<RouteRecordRaw> = [
     path: '/signup',
     component: SignUpView
   },
-  {
-    path: "/detail/:id",
-    component: DetailView
-  },
+
   { path: '/tabs',
     component: TabsPage,
     children: [
       {
         path: '',
         redirect: '/tabs/gallery'
+      },
+      {
+        path: "/detail/:id",
+        component: DetailView
       },
       {
         path: 'search',

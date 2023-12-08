@@ -23,5 +23,7 @@ export interface NewTravelSnap {
     latitude: number;
     longitude: number;
   }
-  
+
+
+
   

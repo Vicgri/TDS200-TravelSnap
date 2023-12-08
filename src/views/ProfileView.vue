@@ -23,7 +23,6 @@ const db = getFirestore();
 const userProfiles = ref([]);
 const profileImageSrc = ref(null);
 
-
 onIonViewDidEnter(async()=>{
   currentUserData.value = await authService.currentUser();
   await loadProfileImage();
@@ -75,19 +74,20 @@ const logout = async()=>{
     </ion-toolbar>
   </ion-header>
   <ion-content>
-  <div class ="profile-section ion-padding">
-    <h2>Welcome</h2>
-    <ion-content class ="heading ion-padding"  v-if="currentUserData">>
-    </ion-content>
-    <div class="information-section">
-      <ion-avatar>
-        <img :src="profileImageSrc" alt="Profile Image"/>
-      </ion-avatar>
+    <div class ="profile-section ion-padding">
+      <h2>Welcome</h2>
+      <ion-content class ="heading ion-padding"  v-if="currentUserData">>
+      </ion-content>
+      <div class="information-section">
+        <ion-avatar>
+          <img :src="profileImageSrc" alt="Profile Image"/>
+        </ion-avatar>
+      </div>
+
+      <div class="action-button ion-padding">
+        <ion-button size="default" class="logout-button" @click="logout">Log out</ion-button>
+      </div>
     </div>
-    <div class="action-button ion-padding">
-      <ion-button size="default" class="logout-button" @click="logout">Log out</ion-button>
-    </div>
-  </div>
   </ion-content>
 </template>
 
