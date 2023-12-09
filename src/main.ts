@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore/lite';
+import { getFirestore } from 'firebase/firestore';
 import { IonicVue } from '@ionic/vue';
 
 /* Core CSS required for Ionic components to work properly */
@@ -23,7 +23,8 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { defineCustomElements } from '@ionic/pwa-elements/loader'
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD_R-vJrkh4_nTfyDk7Hkky7K0FdsS6g0U",
@@ -37,6 +38,7 @@ const firebaseConfig = {
 
 //initialize fra firebase appen
 const firebaseApp = initializeApp(firebaseConfig)
+export const auth = getAuth(firebaseApp);
 // Get a reference to Firestore
 export const db = getFirestore(firebaseApp);
 
@@ -47,10 +49,8 @@ export const db = getFirestore(firebaseApp);
 
 
 const app = createApp(App)
-  .use(IonicVue)
-  .use(router);
-
-
+    .use(IonicVue)
+    .use(router);
 
 defineCustomElements(window);
 router.isReady().then(() => {

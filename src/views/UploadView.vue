@@ -1,8 +1,24 @@
 <script setup lang="ts">
-import { IonBackButton, IonButton, IonButtons, IonChip, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToolbar, toastController } from '@ionic/vue';
-import { add, trashOutline } from 'ionicons/icons';
-import { ref } from 'vue';
-import { Camera, CameraResultType } from '@capacitor/camera';
+import {
+  IonButton,
+  IonChip,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonPage,
+  IonTextarea,
+  IonTitle,
+  IonToolbar,
+  toastController,
+  IonAlert,
+} from "@ionic/vue";
+import { add, trashOutline } from "ionicons/icons";
+import { ref } from "vue";
+import { Camera, CameraResultType } from "@capacitor/camera";
 import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
 import {
   getStorage,
@@ -12,39 +28,38 @@ import {
 } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 
-import { useRouter } from 'vue-router';
-import {NewTravelSnap} from "../models/TravelSnapModel"
+import { useRouter } from "vue-router";
+import { NewTravelSnap } from "../models/TravelSnapModel";
 
 const router = useRouter();
 // Keeps track of the input field for new hashtags
 const newHashtagText = ref("");
-
-// Keeps track of all data input from the user towards adding a new camp spot
+const alertButtons: { text: string }[] = [{ text: "OK" }];
 
 const newTravelSnap = ref<NewTravelSnap>({
   title: "",
   description: "",
   hashtags: [],
-  imageUrls: [], // Array to store multiple image URLs
+  imageUrls: [],
   comments: [],
-  id: ""
+  id: "",
+  location: { latitude: 0, longitude: 0 },
 });
 const travelCollection = collection(getFirestore(), "travel");
-// Add whatever is in the hashtag input field to the camp spot's array of hashtags
+
 const addNewHashtag = () => {
-  // Avoid adding empty hashtags
   if (newHashtagText.value) {
-    newTravelSnap.value.hashtags.push(newHashtagText.value); // LES: Det er ikke farlig hvis du får røde squiggly lines her, det skal vi senere fikse med TypeScript
+    newTravelSnap.value.hashtags.push(newHashtagText.value);
     newHashtagText.value = "";
   }
+};
 
-  // TODO Logic to avoid duplicate hashtags
-}
-// Handle data POSTing
 const postNewTravelSnap = async () => {
-  // TODO Logic to post the camp spot to the backend/Directus
   if (newTravelSnap.value.imageUrls.length === 0) {
-    alert("Upload minimum one photo");
+    const alert = document.getElementById("upload-alert");
+    if (alert) {
+      await alert.present();
+    }
     return;
   }
 
@@ -52,8 +67,7 @@ const postNewTravelSnap = async () => {
     const generatedUUID = uuidv4();
     const newImageUrls = [];
     for (const imageUrl of newTravelSnap.value.imageUrls) {
-
-      const imageName = new Date().getTime() + '.jpg'; // generate a unique image name
+      const imageName = new Date().getTime() + ".jpg"; // generate a unique image name
       const storageRef = getStorage();
       const imageRef = dbRef(storageRef, `images/${imageName}`);
       const response = await fetch(imageUrl);
@@ -68,28 +82,17 @@ const postNewTravelSnap = async () => {
     newTravelSnap.value.id = generatedUUID;
     await setDoc(doc(travelCollection, generatedUUID), newTravelSnap.value);
     const successToast = await toastController.create({
-      message: 'Travel uploaded',
+      message: "Travel uploaded",
       duration: 1500,
-      position: 'bottom',
-      color: 'success'
+      position: "bottom",
+      color: "success",
     });
-
     await successToast.present();
-    router.replace('/home');
-
   } catch (error) {
-    const errorToast = await toastController.create({
-      message: 'Noe gikk galt ved opplasting av teltplass!',
-      duration: 2500,
-      position: 'bottom',
-      color: 'danger'
-    });
-
-    await errorToast.present();
-    console.error(error);
+    console.error("Error uploading travel:", error);
   }
+};
 
-}
 // Open the device's camera and/or file picker UI
 const triggerCamera = async () => {
   const photo = await Camera.getPhoto({
@@ -100,9 +103,7 @@ const triggerCamera = async () => {
   if (photo.webPath) {
     newTravelSnap.value.imageUrls.push(photo.webPath);
   }
-
 };
-
 
 // Handle (preview) image removal
 const removeImagePreview = (index: number) => {
@@ -111,69 +112,115 @@ const removeImagePreview = (index: number) => {
     // Remove the image URL at the specified index
     newTravelSnap.value.imageUrls.splice(index, 1);
   }
-}
-
+};
 </script>
 
 <template>
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-back-button default-href="/"></ion-back-button>
-        </ion-buttons>
-        <ion-title>Add travel</ion-title>
+        <ion-title>Add Travel</ion-title>
       </ion-toolbar>
     </ion-header>
 
     <ion-content :fullscreen="true">
-
       <ion-list>
-
-        <!-- Logic for file picking / using camera will be added later -->
-        <ion-button @click="triggerCamera" class="image-picker" color="light">
-          Choose a file or take a photo 📸
+        <ion-button
+          @click="triggerCamera"
+          class="image-picker"
+          color="gradient-primary"
+        >
+          Upload a file or take a photo 📸
         </ion-button>
 
+        <!-- Image previews -->
         <section v-if="newTravelSnap.imageUrls.length">
-          <div v-for="(imageUrl, index) in newTravelSnap.imageUrls" :key="index"> <!--sto imageUrls-->
+          <div
+            v-for="(imageUrl, index) in newTravelSnap.imageUrls"
+            :key="index"
+          >
             <img :src="imageUrl" />
-            <ion-button @click="() => removeImagePreview(index)" fill="default" class="remove-image-preview">
-              <ion-icon slot="icon-only" :icon="trashOutline" color="danger"></ion-icon>
+            <ion-button
+              @click="() => removeImagePreview(index)"
+              fill="clear"
+              class="remove-image-preview"
+            >
+              <ion-icon
+                slot="icon-only"
+                :icon="trashOutline"
+                color="danger"
+              ></ion-icon>
             </ion-button>
           </div>
         </section>
 
-
+        <!-- Title input -->
         <ion-item>
-          <ion-label class="label-mild" position="floating">Title</ion-label>
+          <ion-label position="floating">Title</ion-label>
           <ion-input type="text" v-model="newTravelSnap.title"></ion-input>
         </ion-item>
 
+        <!-- Description textarea -->
         <ion-item>
-          <ion-label class="label-mild" position="floating">Description</ion-label>
-          <ion-textarea type="password" v-model="newTravelSnap.description"></ion-textarea>
+          <ion-label position="floating">Description</ion-label>
+          <ion-textarea
+            type="text"
+            v-model="newTravelSnap.description"
+          ></ion-textarea>
         </ion-item>
 
+        <!-- Location inputs -->
         <ion-item>
-          <ion-label class="label-mild" position="floating">Hashtags</ion-label>
-          <ion-input type="text" v-model="newHashtagText"></ion-input>
+          <ion-row>
+            <ion-col>
+              <ion-label class="label-mild">Latitude</ion-label>
+              <ion-input
+                type="number"
+                v-model="newTravelSnap.location.latitude"
+              ></ion-input>
+            </ion-col>
+            <ion-col>
+              <ion-label class="label-mild">Longitude</ion-label>
+              <ion-input
+                type="number"
+                v-model="newTravelSnap.location.longitude"
+              ></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-item>
 
-          <ion-button slot="end" color="dark" size="default" @click="addNewHashtag">
+        <!-- Hashtag input -->
+        <ion-item>
+          <ion-label position="floating">Hashtags</ion-label>
+          <ion-input type="text" v-model="newHashtagText"></ion-input>
+          <ion-button
+            slot="end"
+            style="--background: #352d16; --color: #ffffff"
+            @click="addNewHashtag"
+          >
             <ion-icon :icon="add"></ion-icon>
           </ion-button>
         </ion-item>
 
+        <!-- Display selected hashtags -->
         <ion-item lines="none">
-          <ion-chip color="primary" v-for="tag in newTravelSnap.hashtags" :key="tag">{{tag}}</ion-chip>
+          <ion-chip
+            v-for="tag in newTravelSnap.hashtags"
+            :key="tag"
+            color="tertiary"
+            >{{ tag }}</ion-chip
+          >
         </ion-item>
 
-        <ion-button @click="postNewTravelSnap" class="button-add" fill="solid" color="dark" size="default">
-          Upload
-        </ion-button>
-
+        <!-- Upload button -->
+        <ion-button class="upload-button" @click="postNewTravelSnap">Upload</ion-button>
+        <ion-alert
+          id="upload-alert"
+          header="Error"
+          message="Upload minimum one photo"
+          :buttons="alertButtons"
+        ></ion-alert>
       </ion-list>
-
     </ion-content>
   </ion-page>
 </template>
@@ -189,31 +236,23 @@ ion-list {
   flex-direction: column;
 }
 
-.label-mild {
-  --color: #8a8a8a !important;
-}
-
 .image-picker {
   height: 20vh;
   margin: 10px;
-  border: 2px #007B88 dashed;
   border-radius: 8px;
   font-size: medium;
+  background: linear-gradient(to bottom, #465b6d, #F3A5A1) !important;
+  color: #ffffff !important;
 }
-
 .remove-image-preview {
   position: absolute;
   right: 0;
 }
 
-.button-add {
-  margin-top: 50px;
-  margin-left: 10px;
-  margin-right: 10px;
+.upload-button {
+  --background: #465b6d; /* Change the background color to your preferred color */
+  --border-radius: 20px; /* Change the border radius to your preferred value */
+  color: #ffffff; /* Change the text color to contrast with the background */
+  font-weight: bold; /* Optionally make the text bold */
 }
-ion-back-button::part(native) {
-  --background: #352D16;;
-  --color: white; /*virker ikke*/
-}
-
 </style>

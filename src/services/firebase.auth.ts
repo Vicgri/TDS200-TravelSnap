@@ -2,7 +2,7 @@ import {
     getAuth,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
-    signOut
+    signOut,
 } from "firebase/auth"
 
 export const authService = {
@@ -21,3 +21,5 @@ export const authService = {
         return getAuth().currentUser
     }
 }
+
+
