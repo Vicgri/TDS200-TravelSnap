@@ -33,6 +33,8 @@ import { NewTravelSnap, TravelComments } from "@/models/TravelSnapModel";
 import { Geolocation } from "@capacitor/geolocation";
 import { GoogleMap } from "@capacitor/google-maps";
 import { db, auth } from "@/main";
+import { onAuthStateChanged } from "@firebase/auth";
+import { User } from "firebase/auth";
 
 // Routing
 const route = useRoute();
@@ -44,7 +46,7 @@ const isModalOpen = ref(false);
 const newCommentText = ref("");
 const isLoadingTravelSnap = ref(true);
 const travelSnap = ref<NewTravelSnap | null>(null);
-const currentUserData = ref(null);
+const currentUserData = ref<User | null>(null);
 const googleMapsRef = ref(null);
 const travelDocRef = doc(db, `travel/${id}`);
 
@@ -52,7 +54,9 @@ const travelDocRef = doc(db, `travel/${id}`);
 onIonViewDidEnter(async () => {
   await fetchTravel();
   await readGeoLocation();
-  currentUserData.value = auth;
+  onAuthStateChanged(auth, (user) => {
+           currentUserData.value = user
+        });
 });
 
 //Geolocation
@@ -122,6 +126,7 @@ const fetchTravel = async () => {
 
 // Updates the Firestore document with the updated comments
 const updateComments = async (updatedComments: TravelComments[]) => {
+  console.log(updatedComments, currentUserData.value);
   try {
     await setDoc(travelDocRef, { comments: updatedComments }, { merge: true });
     travelSnap.value.comments = updatedComments;
@@ -139,7 +144,7 @@ const addNewComment = async () => {
         ? travelSnap.value?.comments.length + 1
         : 1,
       text: newCommentText.value,
-      userId: currentUserData.value.name,
+      userId: currentUserData.value.email,
     };
 
     // Creates an array of updated comments by adding the new comment
