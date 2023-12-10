@@ -263,7 +263,7 @@ const removeComment = async (commentId: number) => {
               <div class="comment-text-and-icon">
                 <p class="comment-text">{{ comment.text }}</p>
 
-                //Display the trash icon only if the comment's userId matches the email of the current user.
+                <!-- Display the trash icon only if the comment's userId matches the email of the current user -->
                 <ion-icon v-if="comment.userId === currentUserData?.email"
                   :icon="trash"
                   @click="removeComment(comment.id)"
