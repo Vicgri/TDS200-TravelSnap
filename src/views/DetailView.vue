@@ -116,6 +116,15 @@ const fetchTravel = async () => {
     if (docSnap.exists()) {
       travels = docSnap.data() as NewTravelSnap;
       travelSnap.value = travels;
+
+      // Fetch user data for each comment
+      for (const comment of travelSnap.value.comments) {
+        const userDocRef = doc(db, `users/${comment.userId}`);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          comment.userData = userDocSnap.data();
+        }
+      }
       isLoadingTravelSnap.value = false;
     } else {
       console.log("No such document!");
@@ -256,9 +265,7 @@ const removeComment = async (commentId: number) => {
             lines="none"
           >
             <ion-avatar slot="start">
-              <img
-                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw=="
-              />
+                <img :src="comment.userData?.profilePicture" />
             </ion-avatar>
             <ion-label class="ion-text-wrap comment-container">
               <div class="comment-username">
