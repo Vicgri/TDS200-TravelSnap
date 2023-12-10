@@ -130,6 +130,7 @@ const triggerCamera = async () => {
 
 };
 
+// Button back to log in page
 const backToLogin =() => {
   router.replace('/authentication')
 }
@@ -138,12 +139,13 @@ const backToLogin =() => {
 <template>
   <ion-content>
 
-    <div class ="back-button ion padding">
+    <div class ="back-button ion-padding">
       <ion-button @click="backToLogin">
         <ion-icon :icon="arrowBack"></ion-icon>
       </ion-button>
     </div>
 
+    <!-- Sign up Form -->
     <div class ="signup-section ion-padding">
       <div class ="heading ion-padding">
         <h1>Create an Account</h1>
@@ -173,6 +175,7 @@ const backToLogin =() => {
           </ion-item>
         </div>
 
+          <!-- Buttons -->
           <div class ="picture-input ion-padding">
             <ion-button @click="triggerCamera" class="image-picker">
               Choose profile picture
@@ -184,8 +187,8 @@ const backToLogin =() => {
               </ion-button>
             </section>
           </div>
-
       </div>
+
       <div class="action-button ion-padding">
         <ion-button size="default" class="signup-button" @click="signUp">Sign Up</ion-button>
         </div>
@@ -232,10 +235,12 @@ ion-item {
 .action-button {
   text-align: center;
 
-  .signup-button {
-    --background: #352d16;
-  }
 }
+
+ion-button {
+  --background: #352d16;
+}
+
 
 
 .remove-image-preview,
