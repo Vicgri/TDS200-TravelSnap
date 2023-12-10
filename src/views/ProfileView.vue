@@ -30,7 +30,7 @@ onIonViewDidEnter(async () => {
   });
 });
 
-const fetchProfileImage = async (userEmail: string) => {
+const fetchProfileImage = async (userEmail: string | null) => {
   try {
     const results: any[] = [];
     const profilesSnaps = await getDocs(collection(db, "users"));
@@ -42,10 +42,10 @@ const fetchProfileImage = async (userEmail: string) => {
     const targetUserProfile = userProfiles.value.find(
       (users) => users.email === userEmail
     );
-    return targetUserProfile.profilePicture;
+    return targetUserProfile?.profilePicture;
   } catch (error) {
     console.error("Error fetching user profile", error);
-    return null;
+    return undefined;
   }
 };
 

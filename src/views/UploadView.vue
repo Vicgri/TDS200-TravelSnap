@@ -62,9 +62,10 @@ const addNewHashtag = () => {
 // Function to post the new travel snap to Firestore
 const postNewTravelSnap = async () => {
   if (newTravelSnap.value.imageUrls.length === 0) {
-    const alert = document.getElementById("upload-alert");
+    const alert = document.getElementById("upload-alert") as HTMLElement & {present: () => Promise<void>};
     if (alert) {
       await alert.present();
+      console.log (alert);
     }
     return;
   }

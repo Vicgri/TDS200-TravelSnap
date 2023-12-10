@@ -9,23 +9,17 @@ import {
 import { authService } from "../services/firebase.auth"
 import { ref } from "vue"
 import { useRouter } from "vue-router";
-import {arrowBack, trashBin} from "ionicons/icons";
+import {arrowBack, /*trashBin*/} from "ionicons/icons";
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import {auth} from "@/main";
 import {
   getStorage,
   uploadBytes,
   getDownloadURL,
   ref as dbRef,
 } from "firebase/storage"
-import {
-  getIdToken
-} from "firebase/auth";
+
 import { v4 as uuidv4 } from "uuid";
-
-
 
 const router = useRouter()
 
@@ -48,7 +42,8 @@ const login = async () => {
     console.log("login successful")
     router.replace('/tabs/gallery');
   } catch (error) {
-    console.error("error with login", error.message)
+    const e = error as Error;
+    console.error("error with login", e.message)
   }
 }
 
@@ -182,9 +177,9 @@ const backToLogin =() => {
             </ion-button>
             <section v-if="userDetails.profilePicture">
               <img :src="userDetails.profilePicture" />
-              <ion-button @click="() => removeImagePreview()" class="remove-image-preview">
+             <!-- <ion-button @click="() => removeImagePreview()" class="remove-image-preview">
                 <ion-icon slot="icon-only" :icon="trashBin" color="danger"></ion-icon>
-              </ion-button>
+              </ion-button>-->
             </section>
           </div>
       </div>
