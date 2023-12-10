@@ -25,22 +25,22 @@ const profileImageSrc = ref<string | undefined>(undefined);
 
 onIonViewDidEnter(async () => {
   onAuthStateChanged(auth, (user) => {
-    currentUserData.value = user;
+    currentUserData.value = user; // Update currentUserData with the current user
     loadProfileImage();
   });
 });
 
 const fetchProfileImage = async (userEmail: string) => {
   try {
-    const results: any[] = [];
-    const profilesSnaps = await getDocs(collection(db, "users"));
+    const results: any[] = [];                                          // Initialize an array to store user profiles
+    const profilesSnaps = await getDocs(collection(db, "users")); // Retrieve user profiles from Firestore
     profilesSnaps.forEach((doc) => {
-      results.push({ id: doc.id, ...doc.data() });
+      results.push({ id: doc.id, ...doc.data() });                     // Extract and push user profile data into the results array
     });
-    userProfiles.value = [...results];
+    userProfiles.value = [...results];                                 // Update userProfiles with the fetched user profiles
 
     const targetUserProfile = userProfiles.value.find(
-      (users) => users.email === userEmail
+      (users) => users.email === userEmail   // Find the user profile matching the provided userEmail
     );
     return targetUserProfile.profilePicture;
   } catch (error) {
@@ -52,18 +52,18 @@ const fetchProfileImage = async (userEmail: string) => {
 const loadProfileImage = async () => {
   console.log(currentUserData.value, "userData");
   if (currentUserData.value?.photoURL) {
-    profileImageSrc.value = currentUserData.value?.photoURL;
+    profileImageSrc.value = currentUserData.value?.photoURL;  // Set profile image source to the current user's photoURL
   } else if (currentUserData.value) {
     profileImageSrc.value = await fetchProfileImage(
       currentUserData.value.email
-    );
+    ); // Fetch and set the profile image source using the fetchProfileImage function
   }
 };
 
 const logout = async () => {
   try {
-    await authService.logout();
-    localStorage.removeItem("auth_token");
+    await authService.logout(); // Attempt to log the user out using authService
+    localStorage.removeItem("auth_token");  // Remove the authentication token from local storage
     router.push("/authentication");
   } catch (error) {
     console.error(error);
@@ -80,10 +80,9 @@ const logout = async () => {
     </ion-header>
     <ion-content>
       <div class="profile-section ion-padding">
-        <h2>Welcome</h2>
-        <ion-content class="heading ion-padding" v-if="currentUserData"
-          >>
-        </ion-content>
+        <h2 class="welcome-text">Welcome</h2>
+        <div class="heading" v-if="currentUserData">
+        </div>
         <div class="information-section">
           <ion-avatar>
             <img :src="profileImageSrc" alt="Profile Image" />
@@ -91,26 +90,27 @@ const logout = async () => {
         </div>
     
         <ion-item>
+          <div class="email-section ion-padding">
           <ion-label>
             <h3>Email:</h3>
             <p class="p">{{ currentUserData?.email }}</p>
           </ion-label>
+          </div>
         </ion-item>
       </div>
-      <div class="action-button ion-padding">
-        <ion-button size="default" class="logout-button" @click="logout"
-          >Log out</ion-button
-        >
+      <div class="action-button">
+        <ion-button size="default" class="logout-button" @click="logout">Log out</ion-button>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <style scoped>
-.heading h1 {
+.welcome-text {
   font-family: "Arial Rounded MT Bold";
   font-size: 43px;
   font-weight: bolder;
+  padding-bottom: 25px;
   color: #352d16;
 }
 
@@ -143,5 +143,11 @@ ion-item {
 
 .p {
   color: black;
+}
+
+.email-section {
+  p {
+    width: 50px;
+  }
 }
 </style>
