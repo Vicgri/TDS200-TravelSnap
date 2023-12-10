@@ -10,7 +10,6 @@ import {
 import { authService } from "../services/firebase.auth"
 import { ref } from "vue"
 import { useRouter } from "vue-router";
-import {arrowBack} from "ionicons/icons";
 import {
   collection,
   getDocs,
@@ -64,7 +63,6 @@ const logout = async()=>{
   }
 
 }
-
 </script>
 
 <template>
