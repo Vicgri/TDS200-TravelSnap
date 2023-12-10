@@ -20,6 +20,7 @@ export interface NewTravelSnap {
     id: number; 
     userId: string;
     text: string;
+    imageUrls: string[];
   }
 
   export interface TravelLocation {
