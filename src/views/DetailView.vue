@@ -82,8 +82,8 @@ const readGeoLocation = async () => {
       apiKey: process.env.MAPS_KEY,
       config: {
         center: {
-          lat: travelSnap.value?.location?.latitude,
-          lng: travelSnap.value?.location?.longitude,
+          lat: Number(travelSnap.value?.location?.latitude),
+          lng: Number(travelSnap.value?.location?.longitude),
         },
         zoom: 16,
       },
@@ -92,8 +92,8 @@ const readGeoLocation = async () => {
     // Adds a marker to the map at the travel location
     const markerId = await myMap.addMarker({
       coordinate: {
-        lat: travelSnap.value?.location?.latitude,
-        lng: travelSnap.value?.location?.longitude,
+        lat: Number(travelSnap.value?.location?.latitude),
+        lng: Number(travelSnap.value?.location?.longitude),
       },
     });
   } catch (error) {

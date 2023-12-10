@@ -15,7 +15,7 @@ const config: CapacitorConfig = {
 
     GoogleMapsPlugin: {
 
-      apiKey: process.env.GOOGLE_MAPS_API_KEY
+      apiKey: process.env.MAPS_KEY
 
     }
 
