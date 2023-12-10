@@ -214,7 +214,7 @@ const removeComment = async (commentId: number) => {
         <ion-card-content>
           {{ travelSnap ? travelSnap.description : "Loading..." }}
           <ion-chip v-for="hashtag in travelSnap.hashtags" :key="hashtag"
-            >#{{ hashtag }}</ion-chip
+            >{{ hashtag }}</ion-chip
           >
           <div v-if="travelSnap && travelSnap.location">
             Geolocation:
