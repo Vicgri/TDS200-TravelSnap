@@ -37,7 +37,7 @@ const firebaseConfig = {
   measurementId: "G-6PS61DYRGL"
 };
 
-//initialize fra firebase appen
+//initialize from the firebase app
 const firebaseApp = initializeApp(firebaseConfig)
 export const auth = getAuth(firebaseApp);
 // Get a reference to Firestore

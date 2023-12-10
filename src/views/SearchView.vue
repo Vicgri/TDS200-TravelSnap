@@ -65,11 +65,10 @@ import {IonInput, IonItem} from "@ionic/vue";
 
 
 
-// function to get the search for the titles from the database
 export const getTravels = async (searchTerm: string) => {
-  const travels = query(collection(db, 'travel'), where('title', '==', searchTerm));
+  const travels = query(collection(db, 'travel'), where('title', '==', searchTerm)); // Query Firestore for travels with a matching title
   const querySnapshot = await getDocs(travels);
-  return querySnapshot.docs.map((doc) => doc.data()) as NewTravelSnap[];
+  return querySnapshot.docs.map((doc) => doc.data()) as NewTravelSnap[];            // Map and return the data from the query snapshot as NewTravelSnap array
 };
 
 
@@ -77,9 +76,9 @@ export default {
   components: { IonItem, IonInput, GalleryComponent },
   data() {
     return {
-      searchTerm: '',
-      searchResults: [] as NewTravelSnap[],
-      errorMessage: '', // Added error message state
+      searchTerm: '',                               // State to store the search term
+      searchResults: [] as NewTravelSnap[],         // State to store the search results
+      errorMessage: '',                             // Added error message state to handle search errors
     };
   },
   methods: {
@@ -109,7 +108,6 @@ export default {
 .error-message {
   display: flex;
   flex-direction: row;
-  padding-bottom: 20px;
   padding-top: 20px;
   padding-left: 20px;
 }
@@ -118,5 +116,8 @@ ion-button {
   --background: #352d16;
 }
 
+.error-message {
+  font-size: 14px;
+}
 
 </style>

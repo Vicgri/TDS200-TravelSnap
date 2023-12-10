@@ -25,17 +25,7 @@ import {
 } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
 
-const triggerCamera = async () => {
-  const photo = await Camera.getPhoto({
-    quality: 100,
-    allowEditing: false,
-    resultType: CameraResultType.Uri,
-  });
-  if (photo.webPath) {
-    userDetails.value.profilePicture = photo.webPath;
-  }
 
-};
 
 const router = useRouter()
 
@@ -47,18 +37,22 @@ const userDetails = ref ({
   profilePicture: ""
 });
 
+// Firestore collection reference for user profiles
 const userProfileCollection = collection(getFirestore(), "users");
+
 const login = async () => {
   try {
-    const user = await authService.login(userDetails.value.email, userDetails.value.password);
-    const idToken = await user?.getIdToken(true)
-    localStorage.setItem("auth_token", idToken)
+    const user = await authService.login(userDetails.value.email, userDetails.value.password);  // Attempt user login using authService
+    const idToken = await user?.getIdToken(true)                                    // Retrieve and set authentication token
+    localStorage.setItem("auth_token", idToken)                                                // Store authentication token in local storage
     console.log("login successful")
     router.replace('/tabs/gallery');
   } catch (error) {
     console.error("error with login", error.message)
   }
 }
+
+// Handles the user signup process asynchronously
   const signUp = async () => {
     try {
       await authService.signUp(userDetails.value.email, userDetails.value.password);
@@ -78,6 +72,8 @@ const login = async () => {
     }
   }
 
+
+  // Upload a users profile picture.
 const postProfilePhoto = async () => {
   if (userDetails.value.profilePicture === "") {
     alert("You must upload a profile picture!");
@@ -85,17 +81,19 @@ const postProfilePhoto = async () => {
   }
   try {
     const generatedUUID = uuidv4();
-    const imageName = new Date().getTime() + '.jpg'; // generate a unique image name
+    const imageName = new Date().getTime() + '.jpg';                            // generate a unique image name
     const storageRef = getStorage();
-    const imageRef = dbRef(storageRef, `profilePicture/${imageName}`);
-    const response = await fetch( userDetails.value.profilePicture);
-    const imageBlob = await response.blob();
-    const snapshot = await uploadBytes(imageRef, imageBlob);
-    const url = await getDownloadURL(snapshot.ref);
-    userDetails.value.profilePicture = url; // Store the URL
+    const imageRef = dbRef(storageRef, `profilePicture/${imageName}`);      //Define the Firebase Storage reference for the image
+    const response = await fetch( userDetails.value.profilePicture);            // Fetch the image from the provided URL
+    const imageBlob = await response.blob();                                    // Convert the fetched image to a blob
+    const snapshot = await uploadBytes(imageRef, imageBlob);                    // Upload the image to Firebase Storage
+    const url = await getDownloadURL(snapshot.ref);                             // Get the download URL of the uploaded image
+    userDetails.value.profilePicture = url;                                     // Store the URL in userDetails
 
     userDetails.value.id = generatedUUID;
-      await setDoc(doc(userProfileCollection, generatedUUID), userDetails.value);
+    await setDoc(doc(userProfileCollection, generatedUUID), userDetails.value);
+
+    // handle error
     const successToast = await toastController.create({
       message: 'Your profile picture is successfully uploaded!',
       duration: 1500,
@@ -119,6 +117,18 @@ const postProfilePhoto = async () => {
   }
 
 }
+
+const triggerCamera = async () => {
+  const photo = await Camera.getPhoto({
+    quality: 100,
+    allowEditing: false,
+    resultType: CameraResultType.Uri,
+  });
+  if (photo.webPath) {
+    userDetails.value.profilePicture = photo.webPath;   // Set profile picture to the URI obtained from the camera
+  }
+
+};
 
 const backToLogin =() => {
   router.replace('/authentication')

@@ -23,16 +23,16 @@ export const authService = {
         return getAuth().currentUser
     },
     async signinWithGoogle() {
-        const provider = new GoogleAuthProvider();
+        const provider = new GoogleAuthProvider();                                    // Create a GoogleAuthProvider instance
         try {
-            const result = await signInWithPopup(getAuth(), provider);
+            const result = await signInWithPopup(getAuth(), provider);                    // Sign in with Google using popup
             const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential?.accessToken;
-            const user = result.user;
-            return user;  // This will effectively return the user
+            const token = credential?.accessToken;                                      // Get the Google access token
+            const user = result.user;                                                             // Get the user object
+            return user;                                                                                // Return the user object
         } catch (error) {
             console.error("Error during Google Sign-In:", error);
-            return null;  // or throw the error depending on your error handling strategy
+            return null;        // Return null or throw the error based on error handling strategy
         }
     }
 }

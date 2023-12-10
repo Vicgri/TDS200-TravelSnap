@@ -10,8 +10,6 @@ import { ref } from "vue"
 import { useRouter } from "vue-router";
 import { IonIcon } from '@ionic/vue';
 
-
-
 const router = useRouter()
 
 const signupPage = () => {
@@ -26,11 +24,12 @@ const userDetails = ref ({
   email: "",
   password: "",
 });
+
 const login = async () => {
   try {
     const user = await authService.login(userDetails.value.email, userDetails.value.password);
-    const idToken = await user.getIdToken(/**foreceRefresh*/ true);
-    localStorage.setItem("auth_token", idToken)
+    const idToken = await user.getIdToken(true); // Retrieve and set authentication token
+    localStorage.setItem("auth_token", idToken) // Store authentication token in local storage
     router.replace('/tabs/gallery');
 
   } catch (error) {
@@ -44,13 +43,13 @@ const login = async () => {
     await errorToast.present();
     console.error(error);
   }
-}
+}// calls the method from authService
 
 const googleLogin = async () => {
   try {
-    const user = await authService.signinWithGoogle();  // this calls the method from authService
-    const idToken = user.accessToken;
-    localStorage.setItem("auth_token", idToken)
+    const user = await authService.signinWithGoogle(); // Attempt Google login using authService
+    const idToken = user.accessToken; // Retrieve Google access token
+    localStorage.setItem("auth_token", idToken) // Store access token in local storage
     router.replace('/tabs/gallery');
 
   } catch (error) {
@@ -68,6 +67,7 @@ const googleLogin = async () => {
       <h1>TravelSnap</h1>
       </div>
 
+      <!-- Form input -->
     <div class="login-form ion-padding">
       <div class ="form-input">
         <ion-icon name="mail"></ion-icon>
@@ -85,21 +85,17 @@ const googleLogin = async () => {
         </ion-item>
       </div>
       </div>
+
+      <!-- Buttons -->
       <div class="action-button ion-padding">
         <ion-button @click="googleLogin"  class="button-auth" fill="solid" color="dark" size="default">
           Google Log in
         </ion-button>
-        <ion-button size="default" class="login-button" @click="login">Log in</ion-button>
-
+        <ion-button size="default" class="login-button ion-margin" @click="login">Log in</ion-button>
         <p>or</p>
-        <ion-button class="signup-button" size="default" @click="signupPage">Sign Up</ion-button>
-
+        <ion-button class="signup-button ion-margin" size="default" @click="signupPage">Sign Up</ion-button>
       </div>
-
-
     </div>
-
-
 
        </ion-content>
 </template>
@@ -150,10 +146,14 @@ ion-item {
   p {
     --background: #352d16;
     display: inline-block;
-    margin-right: 20px;
+    margin-right: 15px;
+    margin-left: 15px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
   p {
     color: #352d16
+
   }
 
 
