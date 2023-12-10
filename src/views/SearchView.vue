@@ -72,6 +72,7 @@ export const getTravels = async (searchTerm: string) => {
   return querySnapshot.docs.map((doc) => doc.data()) as NewTravelSnap[];
 };
 
+
 export default {
   components: { IonItem, IonInput, GalleryComponent },
   data() {
