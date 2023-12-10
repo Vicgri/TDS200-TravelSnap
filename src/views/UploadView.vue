@@ -81,8 +81,6 @@ const postNewTravelSnap = async () => {
       const imageRef = dbRef(storageRef, `images/${imageName}`);
       const response = await fetch(imageUrl);
       // Fetches and uploads the image to storage
-      console.log(imageUrl);
-      console.log(response);
       const imageBlob = await response.blob();
       const snapshot = await uploadBytes(imageRef, imageBlob);
       // Gets the download URL for the uploaded image

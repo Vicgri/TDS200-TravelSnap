@@ -23,7 +23,7 @@ import {
   onIonViewDidEnter,
 } from "@ionic/vue";
 import { ref } from "vue";
-import { chatboxOutline, arrowBack, trash } from "ionicons/icons";
+import { chatboxOutline, trash } from "ionicons/icons";
 import { useRoute } from "vue-router";
 import { collection, getDoc, setDoc, updateDoc, doc } from "firebase/firestore";
 
@@ -38,9 +38,6 @@ import { db, auth } from "@/main";
 const route = useRoute();
 const { id } = route.params;
 const router = useRouter();
-const backToGallery = () => {
-  router.replace("/gallery");
-};
 
 // States
 const isModalOpen = ref(false);
@@ -85,8 +82,8 @@ const readGeoLocation = async () => {
       apiKey: process.env.MAPS_KEY,
       config: {
         center: {
-          lat: travelSnap.value?.location?.latitude,
-          lng: travelSnap.value?.location?.longitude,
+          lat: Number(travelSnap.value?.location?.latitude),
+          lng: Number(travelSnap.value?.location?.longitude),
         },
         zoom: 16,
       },
@@ -95,8 +92,8 @@ const readGeoLocation = async () => {
     // Adds a marker to the map at the travel location
     const markerId = await myMap.addMarker({
       coordinate: {
-        lat: travelSnap.value?.location?.latitude,
-        lng: travelSnap.value?.location?.longitude,
+        lat: Number(travelSnap.value?.location?.latitude),
+        lng: Number(travelSnap.value?.location?.longitude),
       },
     });
   } catch (error) {
@@ -133,7 +130,7 @@ const updateComments = async (updatedComments: TravelComments[]) => {
   }
 };
 // Add comments
-console.log(currentUserData.value); //value er null og den skal egentlig være currentUserData ? dennelinjen skal vekk
+console.log(currentUserData.value);
 const addNewComment = async () => {
   try {
     // Creates a new comment object with an increased ID
