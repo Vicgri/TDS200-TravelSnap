@@ -102,6 +102,7 @@ const postNewTravelSnap = async () => {
   } catch (error) {
     console.error("Error uploading travel:", error);
   }
+  router.replace('/tabs/gallery');
 };
 
 // Function to triggers the device's camera and/or file picker UI
