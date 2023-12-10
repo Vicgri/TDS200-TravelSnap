@@ -1,3 +1,4 @@
+import { auth } from "@/main";
 import {
     getAuth,
     signInWithEmailAndPassword,
@@ -18,7 +19,7 @@ export const authService = {
         return await signOut(getAuth());
     },
     async currentUser() {
-        return getAuth().currentUser
+        return auth.currentUser
     }
 }
 

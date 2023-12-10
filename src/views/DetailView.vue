@@ -39,7 +39,7 @@ import { User } from "firebase/auth";
 // Routing
 const route = useRoute();
 const { id } = route.params;
-const router = useRouter();
+//const router = useRouter();
 
 // States
 const isModalOpen = ref(false);
@@ -134,8 +134,8 @@ const updateComments = async (updatedComments: TravelComments[]) => {
     console.error("Error updating comments:", error);
   }
 };
+
 // Add comments
-console.log(currentUserData.value);
 const addNewComment = async () => {
   try {
     // Creates a new comment object with an increased ID
