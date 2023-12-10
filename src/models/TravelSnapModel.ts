@@ -1,4 +1,6 @@
 
+// Represents the structure of a travelsnap using TypeScript interfaces.
+// Each property defines a characteristic of the TravelSnap, TravelComments and TravelLocation.
 export interface NewTravelSnap {
     id: string;
     title: string;
@@ -8,7 +10,8 @@ export interface NewTravelSnap {
     comments: TravelComments[];
     location: TravelLocation;
   }
-  
+
+  // Response containing a single NewTravelSnap
   export interface NewTravelSnapResponse {
     travel_snap_by_id: NewTravelSnap;
   }
