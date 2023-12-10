@@ -12,6 +12,8 @@ import { useRouter } from "vue-router";
 import {arrowBack, trashBin} from "ionicons/icons";
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import {auth} from "@/main";
 import {
   getStorage,
   uploadBytes,
@@ -177,7 +179,7 @@ const backToLogin =() => {
       <div class="action-button ion-padding">
         <ion-button size="default" class="signup-button" @click="signUp">Sign Up</ion-button>
         </div>
-    </div>
+      </div>
     </div>
   </ion-content>
 </template>
@@ -219,14 +221,12 @@ ion-item {
 
 .action-button {
   text-align: center;
+
   .signup-button {
     --background: #352d16;
   }
 }
 
-.back-button ion-button {
-  --background: #352d16;
-}
 
 .remove-image-preview,
 .image-picker {

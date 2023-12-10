@@ -26,6 +26,7 @@ import './theme/variables.css';
 import { defineCustomElements } from '@ionic/pwa-elements/loader'
 import { getAuth } from 'firebase/auth';
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyD_R-vJrkh4_nTfyDk7Hkky7K0FdsS6g0U",
   authDomain: "travelsnap-1234a.firebaseapp.com",
@@ -42,11 +43,9 @@ export const auth = getAuth(firebaseApp);
 // Get a reference to Firestore
 export const db = getFirestore(firebaseApp);
 
+
 // Get a reference to Firebase Storage
 // export const storage = firebase.storage();
-
-
-
 
 const app = createApp(App)
     .use(IonicVue)
@@ -56,3 +55,4 @@ defineCustomElements(window);
 router.isReady().then(() => {
   app.mount('#app');
 });
+

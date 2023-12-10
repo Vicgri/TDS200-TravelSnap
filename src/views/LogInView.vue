@@ -11,6 +11,7 @@ import { useRouter } from "vue-router";
 import { IonIcon } from '@ionic/vue';
 
 
+
 const router = useRouter()
 
 const signupPage = () => {
@@ -25,14 +26,14 @@ const userDetails = ref ({
   email: "",
   password: "",
 });
-
 const login = async () => {
   try {
-    await authService.login(userDetails.value.email, userDetails.value.password);
-    console.log("login successful")
+    const user = await authService.login(userDetails.value.email, userDetails.value.password);
+    const idToken = await user.getIdToken(/**foreceRefresh*/ true);
+    localStorage.setItem("auth_token", idToken)
     router.replace('/tabs/gallery');
-  }
-  catch (error) {
+
+  } catch (error) {
     const errorToast = await toastController.create({
       message: 'Login unsuccessful. Please sign up or check if the email and password is correct.',
       duration: 3500,
@@ -41,6 +42,18 @@ const login = async () => {
     });
 
     await errorToast.present();
+    console.error(error);
+  }
+}
+
+const googleLogin = async () => {
+  try {
+    const user = await authService.signinWithGoogle();  // this calls the method from authService
+    const idToken = user.accessToken;
+    localStorage.setItem("auth_token", idToken)
+    router.replace('/tabs/gallery');
+
+  } catch (error) {
     console.error(error);
   }
 }
@@ -73,7 +86,11 @@ const login = async () => {
       </div>
       </div>
       <div class="action-button ion-padding">
+        <ion-button @click="googleLogin"  class="button-auth" fill="solid" color="dark" size="default">
+          Google Log in
+        </ion-button>
         <ion-button size="default" class="login-button" @click="login">Log in</ion-button>
+
         <p>or</p>
         <ion-button class="signup-button" size="default" @click="signupPage">Sign Up</ion-button>
 
