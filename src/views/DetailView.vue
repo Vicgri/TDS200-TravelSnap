@@ -34,50 +34,51 @@ import { Geolocation } from "@capacitor/geolocation";
 import { GoogleMap } from "@capacitor/google-maps";
 import { db, auth } from "@/main";
 
-/* Using the route object, we can get data for the user's current route */
+// Routing
 const route = useRoute();
-/* Retrieve the id parameter from the current route's query string (/detail/:id) */
 const { id } = route.params;
 const router = useRouter();
-
 const backToGallery = () => {
-  router.replace("/gallery"); //skal sende til galleryview.  ?
+  router.replace("/gallery");
 };
 
-/* States */
+// States
 const isModalOpen = ref(false);
 const newCommentText = ref("");
 const isLoadingTravelSnap = ref(true);
 const travelSnap = ref<NewTravelSnap | null>(null);
-//const hasUserLiked = ref(false);
 const currentUserData = ref(null);
 const googleMapsRef = ref(null);
-
-//const travelCollection = collection(db, `travel/${id}`);
 const travelDocRef = doc(db, `travel/${id}`);
 
+// Lifecycle hook, executes when view is entered.
 onIonViewDidEnter(async () => {
   await fetchTravel();
   await readGeoLocation();
-  //await checkUserLikeStatus();
   currentUserData.value = auth;
 });
 
+//Geolocation
 const readGeoLocation = async () => {
   try {
     if (!travelSnap.value?.location) {
+      // Gets the current device's geolocation
       const position = await Geolocation.getCurrentPosition();
+      // Creates a location object with latitude and longitude
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
       const location = {
         latitude,
         longitude,
       };
+      // Updates the Firestore document with the new location
       await updateDoc(travelDocRef, { location });
+      // Updates the local travelSnap with the new location
       travelSnap.value.location = location;
     }
 
-    console.log(process.env);
+    /* Google Maps
+    - Creates a Google Map using Capacitor Google Maps plugin */
     const myMap = await GoogleMap.create({
       id: "my-google-map",
       element: googleMapsRef.value,
@@ -91,6 +92,7 @@ const readGeoLocation = async () => {
       },
     });
 
+    // Adds a marker to the map at the travel location
     const markerId = await myMap.addMarker({
       coordinate: {
         lat: travelSnap.value?.location?.latitude,
@@ -102,13 +104,13 @@ const readGeoLocation = async () => {
   }
 };
 
+//Gets document from firestore and accesses the document´s data.
 const fetchTravel = async () => {
   try {
     let travels: NewTravelSnap | null = null;
 
-    // Get the document
     const docSnap = await getDoc(travelDocRef);
-    // Access the document's data
+
     if (docSnap.exists()) {
       travels = docSnap.data() as NewTravelSnap;
       travelSnap.value = travels;
@@ -121,6 +123,7 @@ const fetchTravel = async () => {
   }
 };
 
+// Updates the Firestore document with the updated comments
 const updateComments = async (updatedComments: TravelComments[]) => {
   try {
     await setDoc(travelDocRef, { comments: updatedComments }, { merge: true });
@@ -129,11 +132,11 @@ const updateComments = async (updatedComments: TravelComments[]) => {
     console.error("Error updating comments:", error);
   }
 };
-
-console.log(currentUserData.value); //value er null og de. skal egentlig være currentUserData ?
+// Add comments
+console.log(currentUserData.value); //value er null og den skal egentlig være currentUserData ? dennelinjen skal vekk
 const addNewComment = async () => {
   try {
-    // Create a new comment object with an increased ID
+    // Creates a new comment object with an increased ID
     const newComment = {
       id: travelSnap.value?.comments
         ? travelSnap.value?.comments.length + 1
@@ -142,10 +145,12 @@ const addNewComment = async () => {
       userId: currentUserData.value.name,
     };
 
+    // Creates an array of updated comments by adding the new comment
     const updatedComments = travelSnap.value?.comments
       ? [...(travelSnap.value?.comments ?? {}), newComment]
       : [newComment];
     console.log(updatedComments);
+    // Update comments in Firestore using the updateComments function
     await updateComments(updatedComments);
     isModalOpen.value = false;
     newCommentText.value = "";
@@ -154,20 +159,21 @@ const addNewComment = async () => {
   }
 };
 
+// Delete comments
 const removeComment = async (commentId: number) => {
   try {
+    // Finds the target comment in the existing comments array
     const targetComment = travelSnap.value?.comments.find(
       (comment) => comment.id === commentId
     );
-
     if (!targetComment) {
       throw new Error("Comment not found.");
     }
-
+    // Creates an array of updated comments by excluding the target comment
     const updatedComments = travelSnap.value?.comments.filter(
       (comment) => comment.id !== commentId
     );
-
+    // If there are updated comments, calls the updateComments function
     if (updatedComments) {
       await updateComments(updatedComments);
     }
@@ -179,6 +185,7 @@ const removeComment = async (commentId: number) => {
 
 <template>
   <ion-page>
+    <!-- Header with back button, title, and comment button -->
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
@@ -195,6 +202,7 @@ const removeComment = async (commentId: number) => {
       </ion-toolbar>
     </ion-header>
 
+    <!-- Image gallery and travelsnap details -->
     <ion-content :fullscreen="true" v-if="travelSnap && !isLoadingTravelSnap">
       <ion-card>
         <div v-for="(image, index) in travelSnap.imageUrls" :key="index">
@@ -215,6 +223,8 @@ const removeComment = async (commentId: number) => {
               {{ travelSnap.location.longitude }}</ion-chip
             >
           </div>
+
+          <!-- Capacitor Google Map component -->
           <div>
             <capacitor-google-map
               ref="googleMapsRef"
@@ -233,6 +243,7 @@ const removeComment = async (commentId: number) => {
               <ion-icon :icon="chatboxOutline"></ion-icon>
             </ion-label>
           </ion-list-header>
+          <!-- Displaying comments -->
           <ion-item
             v-for="comment in travelSnap ? travelSnap.comments : []"
             :key="comment.id"
@@ -259,6 +270,7 @@ const removeComment = async (commentId: number) => {
         </ion-list>
       </ion-card>
 
+      <!-- Comment input modal -->
       <ion-modal
         :is-open="isModalOpen"
         :initial-breakpoint="0.25"

@@ -31,11 +31,14 @@ import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "vue-router";
 import { NewTravelSnap } from "../models/TravelSnapModel";
 
+// Routing
 const router = useRouter();
-// Keeps track of the input field for new hashtags
+
+// Inputfield for new hashtags
 const newHashtagText = ref("");
 const alertButtons: { text: string }[] = [{ text: "OK" }];
 
+// Variable to store new travel data
 const newTravelSnap = ref<NewTravelSnap>({
   title: "",
   description: "",
@@ -45,8 +48,10 @@ const newTravelSnap = ref<NewTravelSnap>({
   id: "",
   location: { latitude: 0, longitude: 0 },
 });
+// Collection reference for the "travel" collection in Firestore
 const travelCollection = collection(getFirestore(), "travel");
 
+// Function to add a new hashtag to the new travel snap
 const addNewHashtag = () => {
   if (newHashtagText.value) {
     newTravelSnap.value.hashtags.push(newHashtagText.value);
@@ -54,6 +59,7 @@ const addNewHashtag = () => {
   }
 };
 
+// Function to post the new travel snap to Firestore
 const postNewTravelSnap = async () => {
   if (newTravelSnap.value.imageUrls.length === 0) {
     const alert = document.getElementById("upload-alert");
@@ -64,21 +70,28 @@ const postNewTravelSnap = async () => {
   }
 
   try {
+    // Generates a unique ID for the travel snap
     const generatedUUID = uuidv4();
     const newImageUrls = [];
     for (const imageUrl of newTravelSnap.value.imageUrls) {
-      const imageName = new Date().getTime() + ".jpg"; // generate a unique image name
+      // Generates a unique image name using the current timestamp
+      const imageName = new Date().getTime() + ".jpg";
+       // Gets storage and image references
       const storageRef = getStorage();
       const imageRef = dbRef(storageRef, `images/${imageName}`);
       const response = await fetch(imageUrl);
+      // Fetches and uploads the image to storage
       console.log(imageUrl);
       console.log(response);
       const imageBlob = await response.blob();
       const snapshot = await uploadBytes(imageRef, imageBlob);
+      // Gets the download URL for the uploaded image
       const url = await getDownloadURL(snapshot.ref);
       newImageUrls.push(url); // Store the URL
     }
+    // Updates the image URLs in the new travel snap
     newTravelSnap.value.imageUrls = newImageUrls;
+    // Sets the ID and post the new travel snap to Firestore
     newTravelSnap.value.id = generatedUUID;
     await setDoc(doc(travelCollection, generatedUUID), newTravelSnap.value);
     const successToast = await toastController.create({
@@ -93,23 +106,25 @@ const postNewTravelSnap = async () => {
   }
 };
 
-// Open the device's camera and/or file picker UI
+// Function to triggers the device's camera and/or file picker UI
 const triggerCamera = async () => {
   const photo = await Camera.getPhoto({
     quality: 100,
     allowEditing: false,
     resultType: CameraResultType.Uri,
   });
+   // Checks if a photo was taken
   if (photo.webPath) {
+    // Adds the photo's webPath to the image URLs in the new travel snap
     newTravelSnap.value.imageUrls.push(photo.webPath);
   }
 };
 
-// Handle (preview) image removal
+// Function to handle the removal of an image preview
 const removeImagePreview = (index: number) => {
-  // Check if the index is within bounds
+  // Checks if the index is within bounds
   if (index >= 0 && index < newTravelSnap.value.imageUrls.length) {
-    // Remove the image URL at the specified index
+    // Removes the image URL at the specified index
     newTravelSnap.value.imageUrls.splice(index, 1);
   }
 };
@@ -117,14 +132,16 @@ const removeImagePreview = (index: number) => {
 
 <template>
   <ion-page>
+     <!-- Header section -->
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-title>Add Travel</ion-title>
       </ion-toolbar>
     </ion-header>
-
+    <!-- Content section -->
     <ion-content :fullscreen="true">
       <ion-list>
+        <!-- Button to trigger the camera/file picker -->
         <ion-button
           @click="triggerCamera"
           class="image-picker"
@@ -139,6 +156,7 @@ const removeImagePreview = (index: number) => {
             v-for="(imageUrl, index) in newTravelSnap.imageUrls"
             :key="index"
           >
+            <!-- Displays the image and a button to remove the image preview -->
             <img :src="imageUrl" />
             <ion-button
               @click="() => removeImagePreview(index)"
@@ -160,7 +178,7 @@ const removeImagePreview = (index: number) => {
           <ion-input type="text" v-model="newTravelSnap.title"></ion-input>
         </ion-item>
 
-        <!-- Description textarea -->
+        <!-- Description input -->
         <ion-item>
           <ion-label position="floating">Description</ion-label>
           <ion-textarea
@@ -169,7 +187,7 @@ const removeImagePreview = (index: number) => {
           ></ion-textarea>
         </ion-item>
 
-        <!-- Location inputs -->
+        <!-- Location input -->
         <ion-item>
           <ion-row>
             <ion-col>
@@ -202,7 +220,7 @@ const removeImagePreview = (index: number) => {
           </ion-button>
         </ion-item>
 
-        <!-- Display selected hashtags -->
+        <!-- Displays selected hashtags -->
         <ion-item lines="none">
           <ion-chip
             v-for="tag in newTravelSnap.hashtags"
@@ -250,9 +268,9 @@ ion-list {
 }
 
 .upload-button {
-  --background: #465b6d; /* Change the background color to your preferred color */
-  --border-radius: 20px; /* Change the border radius to your preferred value */
-  color: #ffffff; /* Change the text color to contrast with the background */
-  font-weight: bold; /* Optionally make the text bold */
+  --background: #465b6d;
+  --border-radius: 20px; 
+  color: #ffffff;
+  font-weight: bold; 
 }
 </style>
