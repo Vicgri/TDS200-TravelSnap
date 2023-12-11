@@ -143,6 +143,8 @@ ion-item {
   text-align: center;
   .logout-button {
     --background: #352d16;
+    border-radius: 30px;
+    overflow: hidden;
   }
 }
 

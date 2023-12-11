@@ -73,17 +73,17 @@ const googleLogin = async () => {
 
       <!-- Form input -->
       <div class="login-form ion-padding">
-        <div class="form-input">
+        <div class="form-input rounded">
           <ion-icon name="mail"></ion-icon>
-          <ion-item>
+          <ion-item class="rounded">
             <ion-label position="floating">Email</ion-label>
             <ion-input type="email" v-model="userDetails.email"></ion-input>
           </ion-item>
         </div>
 
-        <div class="form-input">
+        <div class="form-input rounded">
           <ion-icon name="lock-closed"></ion-icon>
-          <ion-item>
+          <ion-item class="rounded">
             <ion-label position="floating">Password</ion-label>
             <ion-input
               type="password"
@@ -94,10 +94,10 @@ const googleLogin = async () => {
       </div>
 
       <!-- Buttons -->
-      <div class="action-button ion-padding">
+      <div class="action-button ion-padding rounded">
         <ion-button
           @click="googleLogin"
-          class="button-auth"
+          class="button-auth rounded"
           fill="solid"
           color="dark"
           size="default"
@@ -106,23 +106,28 @@ const googleLogin = async () => {
         </ion-button>
         <ion-button
           size="default"
-          class="login-button ion-margin"
+          class="login-button ion-margin rounded"
           @click="login"
-          >Log in</ion-button
         >
+          Log in
+        </ion-button>
         <p>or</p>
         <ion-button
-          class="signup-button ion-margin"
+          class="signup-button ion-margin rounded"
           size="default"
           @click="signupPage"
-          >Sign Up</ion-button
         >
+          Sign Up
+        </ion-button>
       </div>
     </div>
   </ion-content>
 </template>
 
 <style scoped>
+.rounded{
+  --border-radius: 30px;
+}
 .heading h1 {
   font-family: "Arial Rounded MT Bold";
   font-size: 43px;
@@ -157,6 +162,7 @@ ion-item {
 .action-button {
   text-align: center;
 }
+
 .login-button,
 .signup-button,
 p {
@@ -166,7 +172,13 @@ p {
   margin-left: 15px;
   font-weight: bold;
   margin-bottom: 20px;
+  --border-radius: 30px; /* Legg til denne linjen for å runde kantene på knappene */
 }
+
+ion-input {
+  --border-radius: 30px; /* Legg til denne linjen for å runde kantene på inputfeltene */
+}
+
 p {
   color: #352d16;
 }
