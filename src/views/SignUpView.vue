@@ -207,7 +207,6 @@ ion-content {
   --background: url("@/assets/mountains.png") center bottom no-repeat;
   height: 100vh;
 }
-
 .signup-section {
   height: 74vh;
   max-width: 600px;
@@ -218,14 +217,13 @@ ion-content {
   margin: auto;
 }
 
-ion-item {
-  --border-radius: 15px;
+ion-item{
+  --border-radius: 30px;
 
 }
 .signup-form  {
   width: 100%;
 }
-
 
 .action-button {
   text-align: center;
@@ -234,8 +232,10 @@ ion-item {
 
 ion-button {
   --background: #352d16;
-}
+  border-radius: 30px;
+  overflow: hidden;
 
+}
 
 
 .remove-image-preview,
