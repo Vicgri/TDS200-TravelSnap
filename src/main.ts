@@ -4,7 +4,6 @@ import router from './router';
 import { getApp, initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { IonicVue } from '@ionic/vue';
-import { Capacitor } from '@capacitor/core';
 
 
 
@@ -60,17 +59,3 @@ router.isReady().then(() => {
 });
 
 
-// handles if the simulator has blank page/black screen
-provideAuth(() => {
-  if(Capacitor.isNativePlatform()) {
-    return initializeAuth(getApp(), {
-      persistence: indexedDBLocalPersistence 
-    })
-  } else {
-    return getAuth()
-  }
-});
-
-function provideAuth(arg0: () => import("@firebase/auth").Auth) {
-  throw new Error('Function not implemented.');
-}
