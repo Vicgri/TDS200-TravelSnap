@@ -1,9 +1,12 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
-import { initializeApp } from "firebase/app";
+import { getApp, initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { IonicVue } from '@ionic/vue';
+import { Capacitor } from '@capacitor/core';
+
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -24,7 +27,8 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { defineCustomElements } from '@ionic/pwa-elements/loader'
-import { getAuth } from 'firebase/auth';
+import { getAuth, indexedDBLocalPersistence, initializeAuth } from 'firebase/auth';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyD_R-vJrkh4_nTfyDk7Hkky7K0FdsS6g0U",
@@ -36,17 +40,15 @@ const firebaseConfig = {
   measurementId: "G-6PS61DYRGL"
 };
 
-//initialize fra firebase appen
+//initialize from the firebase app
 const firebaseApp = initializeApp(firebaseConfig)
 export const auth = getAuth(firebaseApp);
 // Get a reference to Firestore
 export const db = getFirestore(firebaseApp);
 
+
 // Get a reference to Firebase Storage
 // export const storage = firebase.storage();
-
-
-
 
 const app = createApp(App)
     .use(IonicVue)
@@ -56,3 +58,19 @@ defineCustomElements(window);
 router.isReady().then(() => {
   app.mount('#app');
 });
+
+
+// handles if the simulator has blank page/black screen
+provideAuth(() => {
+  if(Capacitor.isNativePlatform()) {
+    return initializeAuth(getApp(), {
+      persistence: indexedDBLocalPersistence 
+    })
+  } else {
+    return getAuth()
+  }
+});
+
+function provideAuth(arg0: () => import("@firebase/auth").Auth) {
+  throw new Error('Function not implemented.');
+}
