@@ -30,7 +30,7 @@ onIonViewDidEnter(async () => {
   });
 });
 
-const fetchProfileImage = async (userEmail: string) => {
+const fetchProfileImage = async (userEmail: string | null) => {
   try {
     const results: any[] = [];                                          // Initialize an array to store user profiles
     const profilesSnaps = await getDocs(collection(db, "users")); // Retrieve user profiles from Firestore
@@ -42,10 +42,10 @@ const fetchProfileImage = async (userEmail: string) => {
     const targetUserProfile = userProfiles.value.find(
       (users) => users.email === userEmail   // Find the user profile matching the provided userEmail
     );
-    return targetUserProfile.profilePicture;
+    return targetUserProfile?.profilePicture;
   } catch (error) {
     console.error("Error fetching user profile", error);
-    return null;
+    return undefined;
   }
 };
 
@@ -84,7 +84,7 @@ const logout = async () => {
         <div class="heading" v-if="currentUserData">
         </div>
         <div class="information-section">
-          <ion-avatar>
+          <ion-avatar class="profile-avatar">
             <img :src="profileImageSrc" alt="Profile Image" />
           </ion-avatar>
         </div>
@@ -92,7 +92,7 @@ const logout = async () => {
         <ion-item>
           <div class="email-section ion-padding">
           <ion-label>
-            <h3>Email:</h3>
+            <h3>You are logged in as:</h3>
             <p class="p">{{ currentUserData?.email }}</p>
           </ion-label>
           </div>
@@ -133,11 +133,17 @@ ion-item {
   align-items: center;
   margin: auto;
 }
+.profile-avatar {
+  width: 120px; /* Juster størrelsen etter behov */
+  height: 120px; /* Juster størrelsen etter behov */
+}
 
 .action-button {
   text-align: center;
   .logout-button {
     --background: #352d16;
+    border-radius: 30px;
+    overflow: hidden;
   }
 }
 

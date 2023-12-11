@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { IonCard, IonCardHeader, /*IonCardSubtitle,*/ IonCardTitle, IonCardContent } from "@ionic/vue";
+import { IonCard, IonCardHeader, IonCardTitle, IonCardContent } from "@ionic/vue";
 import TravelSnapImage from "../components/TravelSnapImage.vue";
 import { NewTravelSnap } from "@/models/TravelSnapModel";
 
 interface Props {
-	travel: NewTravelSnap 
+	travel: NewTravelSnap
 }
 
 defineProps<Props>();
@@ -19,7 +19,6 @@ defineProps<Props>();
 		</div>
 
 		<ion-card-header>
-			<!--<ion-card-subtitle>{{ spot.hashtags }}</ion-card-subtitle>-->
 			<ion-card-title>{{ travel.title }}</ion-card-title>
 		</ion-card-header>
 

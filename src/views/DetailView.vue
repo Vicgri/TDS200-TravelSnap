@@ -25,9 +25,8 @@ import {
 import { ref } from "vue";
 import { chatboxOutline, trash } from "ionicons/icons";
 import { useRoute } from "vue-router";
-import { collection, getDoc, setDoc, updateDoc, doc } from "firebase/firestore";
+import { getDoc, setDoc, updateDoc, doc } from "firebase/firestore";
 
-import { useRouter } from "vue-router";
 import TravelSnapImage from "@/components/TravelSnapImage.vue";
 import { NewTravelSnap, TravelComments } from "@/models/TravelSnapModel";
 import { Geolocation } from "@capacitor/geolocation";
@@ -62,24 +61,40 @@ onIonViewDidEnter(async () => {
 //Geolocation
 const readGeoLocation = async () => {
   try {
-    if (!travelSnap.value?.location) {
-      // Gets the current device's geolocation
-      const position = await Geolocation.getCurrentPosition();
-      // Creates a location object with latitude and longitude
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      const location = {
-        latitude,
-        longitude,
-      };
-      // Updates the Firestore document with the new location
-      await updateDoc(travelDocRef, { location });
-      // Updates the local travelSnap with the new location
-      travelSnap.value.location = location;
+    if (!travelSnap.value?.location && travelSnap.value) {
+      // Check if user-provided values are available
+      const userProvidedLatitude = parseFloat(travelSnap.value.location.latitude);
+      const userProvidedLongitude = parseFloat(travelSnap.value.location.longitude);
+
+      if (!isNaN(userProvidedLatitude) && !isNaN(userProvidedLongitude)) {
+        // Use user-provided values
+        const location = {
+          latitude: userProvidedLatitude,
+          longitude: userProvidedLongitude,
+        };
+        // Updates the Firestore document with the user-provided location
+        await updateDoc(travelDocRef, { location });
+        // Updates the local travelSnap with the user-provided location
+        travelSnap.value.location = location;
+      } else {
+        // Fetch the current device's geolocation
+        const position = await Geolocation.getCurrentPosition();
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const location = {
+          latitude,
+          longitude,
+        };
+        // Updates the Firestore document with the new location
+        await updateDoc(travelDocRef, { location });
+        // Updates the local travelSnap with the new location
+        travelSnap.value.location = location;
+      }
     }
 
     /* Google Maps
     - Creates a Google Map using Capacitor Google Maps plugin */
+    if (googleMapsRef.value && process.env.MAPS_KEY){
     const myMap = await GoogleMap.create({
       id: "my-google-map",
       element: googleMapsRef.value,
@@ -94,12 +109,13 @@ const readGeoLocation = async () => {
     });
 
     // Adds a marker to the map at the travel location
-    const markerId = await myMap.addMarker({
+    await myMap.addMarker({
       coordinate: {
         lat: Number(travelSnap.value?.location?.latitude),
         lng: Number(travelSnap.value?.location?.longitude),
       },
     });
+  }
   } catch (error) {
     console.error("An error occured trying to get location:", error);
   }
@@ -107,10 +123,9 @@ const readGeoLocation = async () => {
 
 //Gets document from firestore and accesses the document´s data.
 const fetchTravel = async () => {
-  try {
-    let travels: NewTravelSnap | null = null;
+ try {
+   let travels: NewTravelSnap | null = null;
 
-    const docSnap = await getDoc(travelDocRef);
 
     if (docSnap.exists()) {
       travels = docSnap.data() as NewTravelSnap;
@@ -133,12 +148,15 @@ const fetchTravel = async () => {
   }
 };
 
+
 // Updates the Firestore document with the updated comments
 const updateComments = async (updatedComments: TravelComments[]) => {
   console.log(updatedComments, currentUserData.value);
   try {
+    if (travelSnap.value){
     await setDoc(travelDocRef, { comments: updatedComments }, { merge: true });
     travelSnap.value.comments = updatedComments;
+  }
   } catch (error) {
     console.error("Error updating comments:", error);
   }
@@ -148,6 +166,7 @@ const updateComments = async (updatedComments: TravelComments[]) => {
 const addNewComment = async () => {
   try {
     // Creates a new comment object with an increased ID
+    if (currentUserData.value){
     const newComment = {
       id: travelSnap.value?.comments
         ? travelSnap.value?.comments.length + 1
@@ -157,14 +176,14 @@ const addNewComment = async () => {
     };
 
     // Creates an array of updated comments by adding the new comment
-    const updatedComments = travelSnap.value?.comments
+    const updatedComments = (travelSnap.value?.comments
       ? [...(travelSnap.value?.comments ?? {}), newComment]
-      : [newComment];
-    console.log(updatedComments);
+      : [newComment]) as TravelComments[];
     // Update comments in Firestore using the updateComments function
     await updateComments(updatedComments);
     isModalOpen.value = false;
     newCommentText.value = "";
+  }
   } catch (error) {
     console.error("Error adding comment to Firebase:", error);
   }
