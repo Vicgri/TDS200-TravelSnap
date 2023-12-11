@@ -80,9 +80,10 @@ const logout = async () => {
     </ion-header>
     <ion-content>
       <div class="profile-section ion-padding">
-        <h2 class="welcome-text">Welcome</h2>
-        <div class="heading" v-if="currentUserData">
-        </div>
+        <h2>Welcome</h2>
+        <ion-content class="heading ion-padding" v-if="currentUserData"
+          >
+        </ion-content>
         <div class="information-section">
           <ion-avatar class="profile-avatar">
             <img :src="profileImageSrc" alt="Profile Image" />
