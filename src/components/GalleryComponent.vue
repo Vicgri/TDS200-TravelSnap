@@ -27,5 +27,4 @@ defineProps<Props>();
   </ion-card>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
