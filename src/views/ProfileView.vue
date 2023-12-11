@@ -82,17 +82,17 @@ const logout = async () => {
       <div class="profile-section ion-padding">
         <h2>Welcome</h2>
         <ion-content class="heading ion-padding" v-if="currentUserData"
-          >>
+          >
         </ion-content>
         <div class="information-section">
-          <ion-avatar>
+          <ion-avatar class="profile-avatar">
             <img :src="profileImageSrc" alt="Profile Image" />
           </ion-avatar>
         </div>
     
         <ion-item>
           <ion-label>
-            <h3>Email:</h3>
+            <h3>You are logged in as:</h3>
             <p class="p">{{ currentUserData?.email }}</p>
           </ion-label>
         </ion-item>
@@ -132,6 +132,10 @@ ion-item {
   justify-content: center;
   align-items: center;
   margin: auto;
+}
+.profile-avatar {
+  width: 120px; /* Juster størrelsen etter behov */
+  height: 120px; /* Juster størrelsen etter behov */
 }
 
 .action-button {
