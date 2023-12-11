@@ -108,31 +108,25 @@ const readGeoLocation = async () => {
 
 //Gets document from firestore and accesses the document´s data.
 const fetchTravel = async () => {
-  try {
-    let travels: NewTravelSnap | null = null;
+ try {
+   let travels: NewTravelSnap | null = null;
 
-    const docSnap = await getDoc(travelDocRef);
 
-    if (docSnap.exists()) {
-      travels = docSnap.data() as NewTravelSnap;
-      travelSnap.value = travels;
+   const docSnap = await getDoc(travelDocRef);
 
-      // Fetch user data for each comment
-      for (const comment of travelSnap.value.comments) {
-        const userDocRef = doc(db, `users/${comment.userId}`);
-        const userDocSnap = await getDoc(userDocRef);
-        if (userDocSnap.exists()) {
-          comment.userData = userDocSnap.data();
-        }
-      }
-      isLoadingTravelSnap.value = false;
-    } else {
-      console.log("No such document!");
-    }
-  } catch (error) {
-    console.error("An error occured fetching travel", error);
-  }
+
+   if (docSnap.exists()) {
+     travels = docSnap.data() as NewTravelSnap;
+     travelSnap.value = travels;
+     isLoadingTravelSnap.value = false;
+   } else {
+     console.log("No such document!");
+   }
+ } catch (error) {
+   console.error("An error occured fetching travel", error);
+ }
 };
+
 
 // Updates the Firestore document with the updated comments
 const updateComments = async (updatedComments: TravelComments[]) => {

@@ -259,7 +259,7 @@ ion-list {
   margin: 10px;
   border-radius: 8px;
   font-size: medium;
-  background: linear-gradient(to bottom, #465b6d, #F3A5A1) !important;
+  background: linear-gradient(to bottom, #007B88, #A2DFEB) !important;
   color: #ffffff !important;
 }
 .remove-image-preview {
@@ -268,7 +268,7 @@ ion-list {
 }
 
 .upload-button {
-  --background: #465b6d;
+  --background: #352d16;
   --border-radius: 20px; 
   color: #ffffff;
   font-weight: bold; 
