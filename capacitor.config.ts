@@ -4,9 +4,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'travelsnap',
   appName: 'travelsnap',
-  webDir: 'dist',
+  webDir: '/',
   server: {
     androidScheme: 'https'
   },
