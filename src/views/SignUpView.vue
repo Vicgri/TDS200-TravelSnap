@@ -4,7 +4,7 @@ import {
   IonContent ,
   IonInput,
   IonItem,
-  toastController
+  toastController,
 } from '@ionic/vue';
 import { authService } from "../services/firebase.auth"
 import { ref } from "vue"
@@ -156,14 +156,14 @@ const backToLogin =() => {
           <ion-icon name="name"></ion-icon>
           <ion-item>
             <ion-label position="floating">First Name</ion-label>
-            <ion-input type="text" v-model="userDetails.firstName"></ion-input>
+            <ion-input  aria-label="text" v-model="userDetails.firstName"></ion-input>
           </ion-item>
 
         <div class ="form-input">
           <ion-icon name="mail"></ion-icon>
           <ion-item>
             <ion-label position="floating">Email</ion-label>
-            <ion-input type="email" v-model="userDetails.email"></ion-input>
+            <ion-input  aria-label="email" v-model="userDetails.email"></ion-input>
           </ion-item>
         </div>
 
@@ -171,7 +171,7 @@ const backToLogin =() => {
           <ion-icon name="lock-closed"></ion-icon>
           <ion-item>
             <ion-label position="floating">Password</ion-label>
-            <ion-input type="password" v-model="userDetails.password"></ion-input>
+            <ion-input aria-label="password" v-model="userDetails.password"></ion-input>
           </ion-item>
         </div>
 

@@ -8,7 +8,7 @@
     <div class="search-input">
       <ion-item>
         <ion-label position="floating">Search location name</ion-label>
-        <ion-input type="search" v-model="searchTerm"></ion-input>
+        <ion-input aria-label="search" v-model="searchTerm"></ion-input>
       </ion-item>
       <ion-button @click="search" size="small">Search</ion-button>
     </div>
@@ -61,7 +61,7 @@ import { db } from "@/main";
 import { collection, query, where, getDocs } from "firebase/firestore"
 import { NewTravelSnap } from "@/models/TravelSnapModel";
 import GalleryComponent from "@/components/GalleryComponent.vue";
-import {IonInput, IonItem} from "@ionic/vue";
+import {IonInput, IonItem, IonButton} from "@ionic/vue";
 
 
 
@@ -73,7 +73,7 @@ export const getTravels = async (searchTerm: string) => {
 
 
 export default {
-  components: { IonItem, IonInput, GalleryComponent },
+  components: { IonItem, IonInput, GalleryComponent, IonButton },
   data() {
     return {
       searchTerm: '',                               // State to store the search term

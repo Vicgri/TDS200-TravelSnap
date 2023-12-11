@@ -6,7 +6,7 @@ dotenv.config();
 const config: CapacitorConfig = {
   appId: 'travelsnap',
   appName: 'travelsnap',
-  webDir: '/',
+  webDir: "dist",
   server: {
     androidScheme: 'https'
   },

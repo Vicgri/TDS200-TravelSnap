@@ -73,7 +73,7 @@ const googleLogin = async () => {
         <ion-icon name="mail"></ion-icon>
         <ion-item>
           <ion-label position="floating">Email</ion-label>
-          <ion-input type="email" v-model="userDetails.email"></ion-input>
+          <ion-input aria-label="email" v-model="userDetails.email"></ion-input>
         </ion-item>
       </div>
 
@@ -81,7 +81,7 @@ const googleLogin = async () => {
         <ion-icon name="lock-closed"></ion-icon>
         <ion-item>
           <ion-label position="floating">Password</ion-label>
-          <ion-input type="password" v-model="userDetails.password"></ion-input>
+          <ion-input  aria-label="password" v-model="userDetails.password"></ion-input>
         </ion-item>
       </div>
       </div>
