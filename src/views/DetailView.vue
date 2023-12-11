@@ -62,19 +62,34 @@ onIonViewDidEnter(async () => {
 const readGeoLocation = async () => {
   try {
     if (!travelSnap.value?.location && travelSnap.value) {
-      // Gets the current device's geolocation
-      const position = await Geolocation.getCurrentPosition();
-      // Creates a location object with latitude and longitude
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      const location = {
-        latitude,
-        longitude,
-      };
-      // Updates the Firestore document with the new location
-      await updateDoc(travelDocRef, { location });
-      // Updates the local travelSnap with the new location
-      travelSnap.value.location = location;
+      // Check if user-provided values are available
+      const userProvidedLatitude = parseFloat(travelSnap.value.location.latitude);
+      const userProvidedLongitude = parseFloat(travelSnap.value.location.longitude);
+
+      if (!isNaN(userProvidedLatitude) && !isNaN(userProvidedLongitude)) {
+        // Use user-provided values
+        const location = {
+          latitude: userProvidedLatitude,
+          longitude: userProvidedLongitude,
+        };
+        // Updates the Firestore document with the user-provided location
+        await updateDoc(travelDocRef, { location });
+        // Updates the local travelSnap with the user-provided location
+        travelSnap.value.location = location;
+      } else {
+        // Fetch the current device's geolocation
+        const position = await Geolocation.getCurrentPosition();
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const location = {
+          latitude,
+          longitude,
+        };
+        // Updates the Firestore document with the new location
+        await updateDoc(travelDocRef, { location });
+        // Updates the local travelSnap with the new location
+        travelSnap.value.location = location;
+      }
     }
 
     /* Google Maps
