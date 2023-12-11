@@ -1,3 +1,50 @@
+<script lang="ts">
+
+import { db } from "@/main";
+import { collection, query, where, getDocs } from "firebase/firestore"
+import { NewTravelSnap } from "@/models/TravelSnapModel";
+import GalleryComponent from "@/components/GalleryComponent.vue";
+import {IonInput, IonItem, IonButton} from "@ionic/vue";
+
+
+
+export const getTravels = async (searchTerm: string) => {
+  const travels = query(collection(db, 'travel'), where('title', '==', searchTerm)); // Query Firestore for travels with a matching title
+  const querySnapshot = await getDocs(travels);
+  return querySnapshot.docs.map((doc) => doc.data()) as NewTravelSnap[];            // Map and return the data from the query snapshot as NewTravelSnap array
+};
+
+
+export default {
+  components: { IonItem, IonInput, GalleryComponent, IonButton },
+  data() {
+    return {
+      searchTerm: '',                               // State to store the search term
+      searchResults: [] as NewTravelSnap[],         // State to store the search results
+      errorMessage: '',                             // Added error message state to handle search errors
+    };
+  },
+  methods: {
+    async search() {
+      if (!this.searchTerm.trim()) {
+        this.errorMessage = 'Whoops! It seems like you forgot to enter a search term. Please try again.';
+        this.searchResults = []; // Clear search results
+      } else {
+        this.errorMessage = ''; // Clear any previous error message
+
+        // Perform search and update results
+        this.searchResults = await getTravels(this.searchTerm);
+
+        if (this.searchResults.length === 0) {
+          this.errorMessage = 'Sorry, we couldn\'t find any matches. Please check your spelling or try a different search.';
+        }
+      }
+    },
+  },
+};
+
+</script>
+
 <template>
   <ion-header>
     <ion-toolbar>
@@ -55,54 +102,6 @@
   </ion-content>
 </template>
 
-<script lang="ts">
-
-import { db } from "@/main";
-import { collection, query, where, getDocs } from "firebase/firestore"
-import { NewTravelSnap } from "@/models/TravelSnapModel";
-import GalleryComponent from "@/components/GalleryComponent.vue";
-import {IonInput, IonItem, IonButton} from "@ionic/vue";
-
-
-
-export const getTravels = async (searchTerm: string) => {
-  const travels = query(collection(db, 'travel'), where('title', '==', searchTerm)); // Query Firestore for travels with a matching title
-  const querySnapshot = await getDocs(travels);
-  return querySnapshot.docs.map((doc) => doc.data()) as NewTravelSnap[];            // Map and return the data from the query snapshot as NewTravelSnap array
-};
-
-
-export default {
-  components: { IonItem, IonInput, GalleryComponent, IonButton },
-  data() {
-    return {
-      searchTerm: '',                               // State to store the search term
-      searchResults: [] as NewTravelSnap[],         // State to store the search results
-      errorMessage: '',                             // Added error message state to handle search errors
-    };
-  },
-  methods: {
-    async search() {
-      if (!this.searchTerm.trim()) {
-        this.errorMessage = 'Whoops! It seems like you forgot to enter a search term. Please try again.';
-        this.searchResults = []; // Clear search results
-      } else {
-        this.errorMessage = ''; // Clear any previous error message
-
-        // Perform search and update results
-        this.searchResults = await getTravels(this.searchTerm);
-
-        if (this.searchResults.length === 0) {
-          this.errorMessage = 'Sorry, we couldn\'t find any matches. Please check your spelling or try a different search.';
-        }
-      }
-    },
-  },
-};
-
-
-</script>
-
 <style scoped>
 .search-input,
 .error-message {
@@ -116,7 +115,7 @@ ion-button {
   --background: #352d16;
   margin-top: 15px;
   height: 20px;
-  border-radius: 30px; /* Juster denne verdien etter dine preferanser */
+  border-radius: 30px; 
   overflow: hidden;
 }
 
